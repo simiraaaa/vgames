@@ -18,21 +18,22 @@ public abstract class MyQuery{
 
     /**
      * データベースにアクセスしSQL文を実行する（con.close()しない）
-     * 
+     *
      * @param con
      *            Connection
      * @param sql
      *            SQL文
      * @return
+     * @throws SQLException
      */
-    public final boolean exe(Connection con, String sql) {
+    public final MyQuery exe(Connection con, String sql) throws SQLException {
         return exe(con, sql, "");
     }
 
 
     /**
      * データベースにアクセスしSQL文を実行する（con.close()しない）
-     * 
+     *
      * @param con
      *            Connection
      * @param sql
@@ -42,25 +43,11 @@ public abstract class MyQuery{
      * @param fields
      *            mapにセットしたいフィールド
      * @return
+     * @throws SQLException
      */
-    public final boolean exe(Connection con, String sql, String primary,
-            String... fields) {
-        boolean isTrue = false;
-        boolean isSelect = !"".equals(primary);
-
-        try {
-            if (isSelect) {
-                isTrue = exe(con.prepareStatement(sql), primary, fields);
-            } else {
-                isTrue = exe(con.prepareStatement(sql));
-            }
-        } catch (SQLException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-            System.out.println("エラーが出たSQL文\n" + sql);
-        }
-
-        return isTrue;
+    public final MyQuery exe(Connection con, String sql, String primary,
+ String... fields) throws SQLException {
+            return exe(con.prepareStatement(sql), primary, fields);
     }
 
 
@@ -73,65 +60,42 @@ public abstract class MyQuery{
      * @param fields
      *            マップに保存するデータの列名
      * @return 成功ならtrue
+     * @throws SQLException
      */
-    public final boolean exe(PreparedStatement ps, String primary, String... fields) {
-        boolean isTrue = false;
+    public final MyQuery exe(PreparedStatement ps, String primary, String... fields) throws SQLException {
+        exeOnly(ps, primary, fields);
+        close(ps);
+        return this;
+    }
+
+    protected static void close(PreparedStatement ps) {
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                System.out.println("ps.close();時のエラー");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void exeOnly(PreparedStatement ps, String primary, String... fields) throws SQLException {
+
         boolean isArray = "[]".equals(primary);
         boolean isSelect = !"".equals(primary);
+        ResultSet rs = null;
+        setPreparedSql(ps);
         if (isSelect) {
-            ResultSet rs = null;
-            try {
-                setPreparedSql(ps);
-                rs = ps.executeQuery();
-                if (isArray) {
-                    this.list = getList(rs, fields);
-                } else {
-                    this.map = getMap(rs, primary, fields);
-                }
-                isTrue = true;
-            } catch (SQLException e) {
-                System.out.println("ps.executeQueryのエラー");
-                e.printStackTrace();
-            } finally {
-                if (rs != null) {
-                    try {
-                        rs.close();
-                    } catch (SQLException e) {
-                        System.out.println("rsクローズ時のエラー");
-                        e.printStackTrace();
-                    }
-                }
-                if (ps != null) {
-                    try {
-                        ps.close();
-                    } catch (SQLException e) {
-                        System.out.println("ps.close();時のエラー");
-                        e.printStackTrace();
-                    }
-                }
+            rs = ps.executeQuery();
+            if (isArray) {
+                this.list = getList(rs, fields);
+            } else {
+                this.map = getMap(rs, primary, fields);
             }
-        } else {
-            try {
-                setPreparedSql(ps);
-                ps.executeUpdate();
-                isTrue = true;
-            } catch (SQLException e) {
-                System.out.println("ps.executeUpdate();時のエラー");
-                e.printStackTrace();
-            } finally {
-                if (ps != null) {
-                    try {
-                        ps.close();
-                    } catch (SQLException e) {
-                        System.out.println("ps.close();時のエラー");
-                        e.printStackTrace();
-                    }
-                }
-            }
-
+        }else {
+            ps.executeUpdate();
         }
 
-        return isTrue;
     }
 
     /**
@@ -139,14 +103,15 @@ public abstract class MyQuery{
      * 
      * @param ps実行するPreparedStatement
      * @return 成功ならtrue
+     * @throws SQLException
      */
-    public final boolean exe(PreparedStatement ps) {
+    public final MyQuery exe(PreparedStatement ps) throws SQLException {
         return exe(ps, "");
     }
 
     /**
-     * ResultSetをmapに格納する(closeはしない)
-     * 
+     * ResultSetをmapに格納する(rs.closeする)
+     *
      * @param primary
      *            mapの主キーにしたいフィールド名
      * @param fields
@@ -164,12 +129,13 @@ public abstract class MyQuery{
                 map2.put(fields[j], rs.getObject(fields[j++]));
             mp.put(rs.getObject(primary), map2);
         }
+        close(rs);
         return mp;
     }
 
     /**
-     * ResultSetをlistに格納する(closeはしない)
-     * 
+     * ResultSetをlistに格納する(rs.closeする)
+     *
      * @param fields
      *            mapにセットしたいフィールド
      * @return li セットしたマップ
@@ -185,7 +151,19 @@ public abstract class MyQuery{
                 map2.put(fields[j], rs.getObject(fields[j++]));
             li.add(map2);
         }
+        close(rs);
         return li;
+    }
+
+    private static void close(ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                System.err.println("rsクローズ時のエラー");
+                e.printStackTrace();
+            }
+        }
     }
 
     public final ArrayList<HashMap<String, Object>> getList() {
@@ -199,7 +177,7 @@ public abstract class MyQuery{
 
     /**
      * exeメソッドの中で使う 何も処理しなければ setPreparedSql(PreparedStatement ps){}と書く
-     * 
+     *
      * @param ps
      */
     abstract protected void setPreparedSql(PreparedStatement ps);

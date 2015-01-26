@@ -11,7 +11,23 @@ import java.sql.SQLException;
 public class MyDatabase extends MyQuery{
 
     private Connection con = null;
+    private PreparedStatement ps = null;
 
+    public PreparedStatement getPs() {
+        return ps;
+    }
+
+    public MyDatabase setPreparedStatement(PreparedStatement ps) {
+        close(this.ps);
+        this.ps = ps;
+        return this;
+    }
+
+    public MyDatabase setPreparedStatement(String sql) throws SQLException {
+        close(ps);
+        this.ps = con.prepareStatement(sql);
+        return this;
+    }
     public Connection getCon() {
         return con;
     }
@@ -84,24 +100,28 @@ public class MyDatabase extends MyQuery{
     /**
      * sql文を実行する<BR>
      * SELECT以外
-     *
+     * 
      * @param sql
      * @return
+     * @throws SQLException
      */
-    public final boolean exe(String sql) {
-        return exe(con, sql);
+    public final MyDatabase exe(String sql) throws SQLException {
+        exe(con, sql);
+        return this;
     }
 
     /**
      * SELECT実行
-     *
+     * 
      * @param sql
      * @param primary
      * @param fields
      * @return
+     * @throws SQLException
      */
-    public final boolean exe(String sql, String primary, String... fields) {
-        return exe(con, sql, primary, fields);
+    public final MyDatabase exe(String sql, String primary, String... fields) throws SQLException {
+        exe(con, sql, primary, fields);
+        return this;
     }
 
     public final MyDatabase close() {
@@ -112,8 +132,19 @@ public class MyDatabase extends MyQuery{
             System.out.println("Connectionクローズに失敗");
             e.printStackTrace();
         }
+        close(ps);
         this.list = null;
         this.map = null;
+        return this;
+    }
+
+    public MyDatabase exeOnly() throws SQLException {
+        exeOnly(ps, "");
+        return this;
+    }
+
+    public MyDatabase exeOnly(String primary, String... fields) throws SQLException {
+        exeOnly(ps, primary, fields);
         return this;
     }
 
@@ -124,6 +155,7 @@ public class MyDatabase extends MyQuery{
         if (this.prepareObjects == null)
             return;
         try {
+            ps.clearParameters();
             for (int i = 0, len = this.prepareObjects.length; i < len; ++i) {
                 Object o = this.prepareObjects[i];
                 ps.setObject(i + 1, (o == null || o.equals("") ? "null" : o));
@@ -135,6 +167,7 @@ public class MyDatabase extends MyQuery{
             this.prepareObjects = null;
         }
     }
+
 
     /**
      * PreparedStatementの?に入れる
