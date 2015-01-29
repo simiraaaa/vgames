@@ -8,7 +8,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ServletLoader extends HttpServlet {
+    private static final String MAPPING_CLASS_NAME = "myclass.servlet.Path";
+    private static PathMapping path = null;
 
+    @Override
+    public void init() throws ServletException {
+        // TODO 自動生成されたメソッド・スタブ
+        try {
+            Class<PathMapping> c = (Class<PathMapping>) Class.forName(MAPPING_CLASS_NAME);
+            path = c.newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+            path = new PathMapping() {};
+        }
+
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -19,32 +34,26 @@ public class ServletLoader extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         // TODO 自動生成されたメソッド・スタブ
-        ServletWrapper servletWrapper = null;
+
         /**
          * いずれの例外も404へ
          */
         try {
-            servletWrapper = load(req);
-        } catch (InstantiationException e) {
+            ServletWrapper servletWrapper = path.load(req.getPathInfo());
+            servletWrapper.setServlet(this);
+            servletWrapper.action(req, res);
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             // TODO 自動生成された catch ブロック
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        }
-        if (servletWrapper == null) {
+            req.getRequestDispatcher("/404.html").forward(req, res);
             return;
         }
-        servletWrapper.setServlet(this);
-        servletWrapper.action(req, res);
+
     }
 
-    public static ServletWrapper load(HttpServletRequest req) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public static Class<ServletWrapper> load(HttpServletRequest req) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 
         String classPath = req.getPathInfo().substring(1);
-        return ((ServletWrapper) Class.forName(classPath).newInstance());
+        return (Class<ServletWrapper>) Class.forName(classPath);
     }
 }
