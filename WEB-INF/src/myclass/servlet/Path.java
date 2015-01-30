@@ -14,15 +14,38 @@ import myclass.wrap.MyHashMap;
  */
 public class Path implements PathMapping {
 
-    private static HashMap<String, String> urlMap = null;
+    private static HashMap<String, Class<ServletWrapper>> urlMap = null;
 
-    public Path() {
+    public Path() throws ClassNotFoundException {
+
+        HashMap<String, String> tempurl = new HashMap<>();
+        urlMap = new HashMap<>();
         // TODO 自動生成されたコンストラクター・スタブ
-        MyHashMap.puts(urlMap, //
+        MyHashMap.puts(tempurl, //
                 LOGINJSON, VGAMES + LOGIN,//
-                LOGOUTJSON, VGAMES + LOGOUTJSON,//
+                LOGOUTJSON, VGAMES + LOGOUT,//
                 ACREG, VGAMES + ACCOUNT_REGISTRATION,//
                 "test.html", VGAMES + "Test");
+
+        tempurl.forEach((k, v) -> {
+            try {
+                urlMap.put(k, (Class<ServletWrapper>) Class.forName(v));
+            } catch (Exception e) {
+                // TODO 自動生成された catch ブロック
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    @Override
+    public ServletWrapper load(String pathInfo) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        String classname = pathInfo.substring(1);
+        if (urlMap.containsKey(classname)) {
+            return urlMap.get(classname).newInstance();
+        } else {
+            throw new ClassNotFoundException();
+        }
     }
 
     public static final String//
@@ -56,9 +79,12 @@ public class Path implements PathMapping {
             UTILJS = SMR + UTIL + JS,//
             AJAX = ".ajax",//
             AJAXJS = SMR + AJAX + JS,//
-            MAINJS = "main" + JS;//
+            MAINJS = "main" + JS,//
+            VGJS = "vgames" + JS
 
-    private static final String[] JSLIBS = { SMRJS, DOMJS, ICONJS, UTILJS, AJAXJS };
+            ;//
+
+    private static final String[] JSLIBS = { SMRJS, DOMJS, ICONJS, UTILJS, AJAXJS, VGJS };
 
     /**
      * JSフォルダにあるライブラリ名をおおよそ取得
@@ -70,12 +96,13 @@ public class Path implements PathMapping {
     }
 
     /**
-     * ServerNameにlocalhostが含まれるか
+     * ServerNameにlocalhostが含まれるか<br>
+     * 192.168.121.21が含まれないか
      *
      * @param req
      * @return
      */
     public static boolean isLocal(HttpServletRequest req) {
-        return req.getServerName().indexOf("localhost") != -1;
+        return req.getServerName().indexOf("localhost") != -1 || req.getServerName().indexOf("192.168.121.21") == -1;
     }
 }

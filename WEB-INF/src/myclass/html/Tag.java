@@ -221,6 +221,6 @@ public class Tag {
      * @return
      */
     public static String createEndTag(String tagName) {
-        return START_BRACKET + SLASH + tagName + END_BRACKET;
+        return START_BRACKET + "" + SLASH + tagName + END_BRACKET;
     }
 }

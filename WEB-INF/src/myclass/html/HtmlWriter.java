@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class HtmlWriter {
 
-    private PrintWriter out = null;
+    protected PrintWriter out = null;
 
-    public HtmlWriter(PrintWriter pw, String title) {
+    public HtmlWriter(PrintWriter pw, String title) throws IOException {
         out = pw;
         init(title);
     }
 
-    public HtmlWriter(PrintWriter pw) {
+    public HtmlWriter(PrintWriter pw) throws IOException {
         out = pw;
         init("");
     }
@@ -36,7 +36,7 @@ public abstract class HtmlWriter {
         this(response.getWriter());
     }
 
-    public HtmlWriter(PrintWriter pw, boolean write) {
+    public HtmlWriter(PrintWriter pw, boolean write) throws IOException {
         out = pw;
         if (write) {
             init("");
@@ -51,7 +51,7 @@ public abstract class HtmlWriter {
         this.out = writer;
     }
 
-    private void init(String title) {
+    private void init(String title) throws IOException {
         write(Html.START_HTML);
         writingHead();
         write(Html.createTitle((title == null ? "" : title)));
@@ -63,12 +63,12 @@ public abstract class HtmlWriter {
     /**
      * このメソッドはコンストラクタで実行されます。
      */
-    public abstract void writingBody();
+    public abstract void writingBody() throws IOException;
 
     /**
      * このメソッドはコンストラクタで実行されます。
      */
-    public abstract void writingHead();
+    public abstract void writingHead() throws IOException;
 
     /**
      * 存在するpathを指定する。<br>

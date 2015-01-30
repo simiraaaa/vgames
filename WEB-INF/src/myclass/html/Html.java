@@ -13,13 +13,23 @@ public class Html {
 
     /**
      * titleタグ
-     * 
+     *
      * @param title
      *            なんてタイトル
      * @return
      */
     public static String createTitle(String title) {
         return Tag.create("title", title);
+    }
+
+    /**
+     * "<link href=\"" + src + "\" rel=\"stylesheet\" type=\"text/css\">";
+     *
+     * @param src
+     * @return
+     */
+    public static String createLinkCSS(String src) {
+        return "<link href=\"" + src + "\" rel=\"stylesheet\" type=\"text/css\">";
     }
 
 }

@@ -18,7 +18,7 @@ public class Attribute extends StyleSheet {
     @Override
     public String create() {
         // TODO 自動生成されたメソッド・スタブ
-        return create();
+        return create(map);
     }
 
     /**
@@ -31,7 +31,7 @@ public class Attribute extends StyleSheet {
         StringBuilder sb = new StringBuilder();
 
         map.forEach((k, v) -> {
-            sb.append(k).append(EQ).append(DBQT).append(v).append(DBQT);
+            sb.append(SPACE).append(k).append(EQ).append(DBQT).append(v).append(DBQT);
         });
 
         return sb.toString();

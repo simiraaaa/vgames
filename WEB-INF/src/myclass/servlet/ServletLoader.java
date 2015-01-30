@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ServletLoader extends HttpServlet {
     private static final String MAPPING_CLASS_NAME = "myclass.servlet.Path";
     private static PathMapping path = null;
+    private static int c = 0;
 
     @Override
     public void init() throws ServletException {
@@ -42,7 +43,7 @@ public class ServletLoader extends HttpServlet {
             ServletWrapper servletWrapper = path.load(req.getPathInfo());
             servletWrapper.setServlet(this);
             servletWrapper.action(req, res);
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+        } catch (Exception e) {
             // TODO 自動生成された catch ブロック
             e.printStackTrace();
             req.getRequestDispatcher("/404.html").forward(req, res);

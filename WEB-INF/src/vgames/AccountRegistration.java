@@ -33,7 +33,7 @@ public class AccountRegistration extends ExtendedHttpServlet {
         CHECK = getParam("check"), //
         NAME = getParam("name");
 
-        String responseMessage = null;
+        String responseMessage = "error!!登録に失敗しました。";
         String responseStatus = "success";
         HashMap<String, String> json = new HashMap<String, String>();
         if (Compare.isAnyEmpty(ID, PASS, CHECK)) {
@@ -99,6 +99,7 @@ public class AccountRegistration extends ExtendedHttpServlet {
             // TODO 自動生成された catch ブロック
             sendAlert(responseMessage, json);
             e.printStackTrace();
+            return;
         }
         sendJSON(JSON.stringify(json));
     }

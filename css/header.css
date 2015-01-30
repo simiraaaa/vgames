@@ -1,0 +1,26 @@
+@CHARSET"UTF-8";
+ html,
+body {
+  margin: 0;
+}
+input,textarea,select {
+  outline: none;
+	border-radius:15px;
+	padding-left:10px;
+	margin:0 5px;
+	border-width:1px;
+}
+.header {
+  position: relative;
+  top: 0;
+  left: 0;
+  min-height: 40px;
+  width: 100%;
+  background: linear-gradient(white, red);
+  background: -webkit-gradient(linear, left top, left bottom, from(white), to(red));
+  line-height: 40px;
+  color: white;
+  font-weight: bold;
+  text-shadow: black -1px -1px;
+  border-bottom: 1px solid silver;
+}
