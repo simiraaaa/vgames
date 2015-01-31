@@ -19,7 +19,7 @@ public class LoginOnly extends ExtendedHttpServlet {
         // TODO 自動生成されたメソッド・スタブ
         res.setContentType("application/json");
         String status = "success";
-        String text = req.getContextPath() + "/" + Path.MYPAGEJSP;
+        String text = req.getContextPath() + "/" + Path.SERVLET + Path.MYPAGEHTML;
         if (!VGLogin.login(req, res)) {
             status = "error";
             text = "IDかパスワードが間違っています。";

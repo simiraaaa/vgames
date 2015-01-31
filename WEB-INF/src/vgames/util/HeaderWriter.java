@@ -65,7 +65,7 @@ public abstract class HeaderWriter {
                 StringJoiner sj = new StringJoiner("','", "['", "'];");
                 genres.forEach(s -> sj.add(s));
                 write(new Tag("script",//
-                "vg.path='" + CONTEXTPATH + "';vg.isGuest=" + String.valueOf(isGuest) + ";vg.GENRE_LIST=" + sj.toString()));
+                "vg.set('" + CONTEXTPATH + "');vg.isGuest=" + String.valueOf(isGuest) + ";vg.GENRE_LIST=" + sj.toString()));
                 writingIntoHead();
 
             }

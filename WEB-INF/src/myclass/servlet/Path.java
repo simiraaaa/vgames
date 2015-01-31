@@ -25,6 +25,7 @@ public class Path implements PathMapping {
                 LOGINJSON, VGAMES + LOGIN,//
                 LOGOUTJSON, VGAMES + LOGOUT,//
                 ACREG, VGAMES + ACCOUNT_REGISTRATION,//
+                MYPAGEHTML, VHTML + MYPAGEJAVA,//
                 "test.html", VGAMES + "Test");
 
         tempurl.forEach((k, v) -> {
@@ -50,6 +51,7 @@ public class Path implements PathMapping {
 
     public static final String//
             VGAMES = "vgames.",
+            VHTML = VGAMES + "html.",//
             JS = ".js",// ,
             JSP = ".jsp",//
             HTML = ".html",//
@@ -62,8 +64,9 @@ public class Path implements PathMapping {
             LOGOUTJS = "logout" + JS,//
             CONTROLLERJS = "controller" + JS,//
             MYPAGE = "mypage",//
+            MYPAGEJAVA = "Mypage",//
             MYPAGEJS = MYPAGE + JS,//
-            MYPAGEJSP = MYPAGE + JSP,//
+            MYPAGEHTML = MYPAGE + HTML,//
             VGSESSIONID = "VGSESSIONID",//
             ACCOUNT_REGISTRATION = "AccountRegistration",//
             ACREG = "acreg" + JSON,//
@@ -84,7 +87,7 @@ public class Path implements PathMapping {
 
             ;//
 
-    private static final String[] JSLIBS = { SMRJS, DOMJS, ICONJS, UTILJS, AJAXJS, VGJS };
+    private static final String[] JSLIBS = { SMRJS, DOMJS, ICONJS, UTILJS, AJAXJS, LOGOUTJS, VGJS, CONTROLLERJS };
 
     /**
      * JSフォルダにあるライブラリ名をおおよそ取得

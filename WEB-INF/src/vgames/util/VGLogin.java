@@ -118,7 +118,7 @@ public class VGLogin {
     }
 
     public static MyDatabase checkLogin(HttpServletRequest req, HttpServletResponse res, User user) {
-        return checkLogin(req, res, user, req.getContextPath(), false);
+        return checkLogin(req, res, user, req.getContextPath() + "/login.jsp", false);
     }
 
     public static MyDatabase checkLogin(HttpServletRequest req, HttpServletResponse res, User user,

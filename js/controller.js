@@ -1,8 +1,8 @@
-var pedit = pedit || {};
+var vg = vg || {};
 
-(function(pedit,smr,undefined){
-  pedit.document = null;
-  pedit.ajax = function(key,o,f){
+(function(vg,smr,undefined){
+  vg.document = null;
+  vg.ajax = function(key,o,f){
     o = o || {};
     o.key=key;
     var sync =
@@ -18,7 +18,7 @@ var pedit = pedit || {};
         type:"post",
         data:o,
         async:!sync,
-        url:pedit.path+"/serv/jv34_k09.PdfController",
+        url:vg.path+"/serv/jv34_k09.PdfController",
         success:function(data){
           var s = data.status;
           if(s==="success"){
@@ -29,18 +29,18 @@ var pedit = pedit || {};
             document.body.style.visibility="hidden";
             smr.global.location.href=data.url;
           }else if (s===3){
-            pedit.insert(data.pdfdata);
+            vg.insert(data.pdfdata);
           }else if(s === "delete"){
             alert(data.text);
             document.body.style.visibility="hidden";
             smr.global.location.reload();
           }else if(s === "search"){
-            var d = pedit.document ||( pedit.document = smr.dom.Element());
+            var d = vg.document ||( vg.document = smr.dom.Element());
             var list = d.query("#pdflist",0,{isWrap:true,setCache:true,getCache:true});
             var child = data.text;
             while(child[0]){
               var c = child.shift();
-              pedit.PdfViewer({
+              vg.PdfViewer({
                 pdfid:c.pdfId,
                 userid:c.userId
               },c.pdfTitle).appendTo(list);
@@ -55,33 +55,33 @@ var pedit = pedit || {};
     };
   };
 
-  smr.define("pedit.Controller",{
-    superClass:pedit.Button,
+  smr.define("vg.Controller",{
+    superClass:vg.Button,
     init:function(key,text,o,f){
       this.superInit(text);
       this.onclick=function(){
         var s = this.style;
       };
-      this.onclick=pedit.ajax(key,o,f);
+      this.onclick=vg.ajax(key,o,f);
     }
   });
 
-  smr.define("pedit.Create",{
-    superClass:pedit.Controller,
+  smr.define("vg.Create",{
+    superClass:vg.Controller,
     init: function(){
       this.superInit(0,"新しくPDFを作る");
     }
   });
 
-  smr.define("pedit.Save",{
-    superClass:pedit.Controller,
+  smr.define("vg.Save",{
+    superClass:vg.Controller,
     init: function(pdfdata,f){
       this.superInit(1,"保存する",pdfdata,f);
     }
   });
 
-  smr.define("pedit.Delete",{
-    superClass:pedit.Controller,
+  smr.define("vg.Delete",{
+    superClass:vg.Controller,
     confirm:function(){
       return confirm("本当に削除しますか?");
     },
@@ -89,14 +89,14 @@ var pedit = pedit || {};
       this.superInit(2,"このPDFを削除する",{pdfid:id},this.confirm);
     }
   });
-  smr.define("pedit.Copy",{
-    superClass:pedit.Controller,
+  smr.define("vg.Copy",{
+    superClass:vg.Controller,
     init: function(o){
       this.superInit(6,"コピーを作る",o);
     }
   });
 
-  smr.define("pedit.PdfViewer",{
+  smr.define("vg.PdfViewer",{
     superClass:smr.dom.Element,
     init: function(o,title,noCopy){
 
@@ -111,7 +111,7 @@ var pedit = pedit || {};
       }).element.className="pdf";
       var margin ={margin:"5px"};
       this.create("iframe").elementSetter({
-        src:pedit.path+"/serv/jv34_k09.ViewPdf?"+qs,
+        src:vg.path+"/serv/jv34_k09.ViewPdf?"+qs,
         width:"150px",
         height:"200px"
       });
@@ -136,15 +136,15 @@ var pedit = pedit || {};
         f.submit();
       };
 
-      noCopy || (this.append(pedit.Copy(o).styleSetter(margin)));
+      noCopy || (this.append(vg.Copy(o).styleSetter(margin)));
 
     }
   });
   var sendTextObject ={query:null};
-  smr.define("pedit.Search",{
-    superClass:pedit.Controller,
+  smr.define("vg.Search",{
+    superClass:vg.Controller,
     send : function(){
-      var d = pedit.document ||( pedit.document = smr.dom.Element());
+      var d = vg.document ||( vg.document = smr.dom.Element());
       var list = d.query("#pdflist",0,{isWrap:true,setCache:true,getCache:true});
       list.noneDisp();
       list.removeChildAll();
@@ -157,9 +157,9 @@ var pedit = pedit || {};
 
   var downEnter = function(e){
     if(e.keyCode!==13)return;
-    pedit.ajax(7,sendTextObject,pedit.Search.prototype.send)();
+    vg.ajax(7,sendTextObject,vg.Search.prototype.send)();
   };
-  smr.define("pedit.SearchDiv",{
+  smr.define("vg.SearchDiv",{
     superClass:smr.dom.Element,
 
     init:function(){
@@ -174,8 +174,8 @@ var pedit = pedit || {};
       }).styleSetter({
         margin:"0 5px"
       }).onkeydown=downEnter;
-      pedit.Search().appendTo(this);
+      vg.Search().appendTo(this);
     }
   });
 
-})(pedit,smr);
+})(vg,smr);

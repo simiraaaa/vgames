@@ -31,7 +31,6 @@ if(user.getId()==null){
 final String
 	CONPATH=request.getContextPath()+"/";
 WrapJspWriter.writeScript(out, CONPATH, Path.JS_PATH, Path.getJsLibs());
-WrapJspWriter.writeScript(out, CONPATH, Path.JS_PATH, Path.LOGOUTJS,Path.CONTROLLERJS);
 
 String escUname=Convert.escapeHtml(user.getName());
 
@@ -42,9 +41,6 @@ db.close();
 <body>
 <div id="header">
 <h3>ようこそ<%=escUname %>さん</h3>
-<%=IntStream.iterate(2, f->{
-    return f*f;
-    }).limit(10).sum()%>
 </div>
 </body>
 </html>

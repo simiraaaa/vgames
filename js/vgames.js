@@ -69,7 +69,7 @@ var vg = vg || {};
     var myPageText = vg.isGuest ? "ログイン" : "マイページ";
 
     f.create("a").elementSetter({
-      href: "#",
+      href: vg.path+"/s/mypage.html",
       textContent: myPageText
     }).styleSetter({
       color:"white",
