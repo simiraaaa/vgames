@@ -26,6 +26,7 @@ public class Path implements PathMapping {
                 LOGOUTJSON, VGAMES + LOGOUT,//
                 ACREG, VGAMES + ACCOUNT_REGISTRATION,//
                 MYPAGEHTML, VHTML + MYPAGEJAVA,//
+                UPLOAD, VGAMES + GAME_UPLOADER,//
                 "test.html", VGAMES + "Test");
 
         tempurl.forEach((k, v) -> {
@@ -58,6 +59,9 @@ public class Path implements PathMapping {
             JSON = ".json",//
             JS_PATH = "js/",//
             SERVLET = "s/",//
+
+            UPLOAD = "gameup" + JSON,//
+            GAME_UPLOADER = "GameUploader",//
             INDEX = "index" + JSP,//
             LOGOUT = "Logout",//
             LOGOUTJSON = "logout" + JSON,//

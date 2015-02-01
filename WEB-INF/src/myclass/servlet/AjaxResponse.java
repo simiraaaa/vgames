@@ -12,7 +12,6 @@ import myclass.wrap.MyHashMap;
 
 public abstract class AjaxResponse extends ExtendedHttpServlet {
 
-
     protected static final String POST = "POST", GET = "GET";
     protected boolean isPOST, isJSONP;
     private String callback = null;

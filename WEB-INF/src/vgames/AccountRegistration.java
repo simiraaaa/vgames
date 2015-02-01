@@ -94,7 +94,7 @@ public class AccountRegistration extends ExtendedHttpServlet {
             MyCookie mk = new MyCookie(req, res);
             mk.setCookie(Path.VGSESSIONID, SESSION_ID).addCookie();
             json.put("status", responseStatus);
-            json.put("text", req.getContextPath() + "/" + Path.MYPAGEHTML);
+            json.put("text", req.getContextPath() + "/s/" + Path.MYPAGEHTML);
         } catch (SQLException e) {
             // TODO 自動生成された catch ブロック
             sendAlert(responseMessage, json);

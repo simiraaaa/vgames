@@ -39,6 +39,7 @@ public abstract class ExtendedHttpServlet implements ServletWrapper {
         servlet = serv;
 
     }
+
     public void action(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String contenttype = req.getContentType();
         if (!Compare.isEmpty(contenttype)) {
@@ -156,8 +157,7 @@ public abstract class ExtendedHttpServlet implements ServletWrapper {
         return parameterMap.get(key);
     }
 
-     abstract protected void subAction(HttpServletRequest req,
-     HttpServletResponse res) throws ServletException, IOException;
+    abstract protected void subAction(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException;
 
     /**
      * request.getParameterValues(s);と同じ
