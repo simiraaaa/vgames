@@ -1,0 +1,44 @@
+@CHARSET "UTF-8";
+
+.dbody{
+	width:100%;
+}
+
+.dbodyin{
+	width:80%;
+	margin: 0 auto;
+}
+
+.formname{
+	margin:5px;
+	padding:0 10px 0 0;
+	font-weight: bold;
+	border-radius:10px;
+	border:1px solid white;
+	border-bottom:1px solid gray;
+	border-right:1px solid gray;
+  background: orange;
+   padding:5px;
+
+}
+
+.formbody{
+	width:80%;
+	margin: 0 auto;
+	padding: 2px;
+	border-radius:10px;
+	border-bottom: 2px solid gray;
+	border-right: 2px solid gray;
+	background: #cecece;
+
+}
+.top{
+	font-weight: bold;
+	text-align: center;
+	font-size: 1.5em;
+	margin :10px;
+}
+
+.attention{
+	font-size: 0.7em;
+}

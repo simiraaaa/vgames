@@ -3,11 +3,11 @@
 body {
   margin: 0;
 }
-input,textarea,select {
+input,textarea,select,button {
   outline: none;
 	border-radius:15px;
 	padding-left:10px;
-	margin:0 5px;
+	margin:5px;
 	border-width:1px;
 }
 .header {

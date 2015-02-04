@@ -15,7 +15,8 @@ final String[]
         SCRIPTS={Path.CREATE_ACCOUNTJS};
 WrapJspWriter.writeScript(out, CONPATH, Path.JS_PATH, JSLIBS,SCRIPTS);
 %>
-<script type="text/javascript">smr.ajax._url="<%=CONPATH+Path.SERVLET+Path.ACREG%>";</script>
+<script type="text/javascript">smr.ajax._url="<%=CONPATH+Path.SERVLET+Path.ACREG%>";
+vg.set("<%=CONPATH%>");</script>
 <title>アカウント作成</title>
 </head>
 <body>

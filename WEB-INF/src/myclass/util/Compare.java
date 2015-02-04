@@ -1,8 +1,8 @@
 package myclass.util;
 
-
 /**
  * 比較が便利になる
+ *
  * @author yuki
  *
  */
@@ -60,7 +60,7 @@ public class Compare {
 
     /**
      * 文字列がnullか空の場合true
-     * 
+     *
      * @param s
      * @return
      */
@@ -70,7 +70,7 @@ public class Compare {
 
     /**
      * すべての文字列がnullか空の場合true
-     * 
+     *
      * @param ss
      * @return
      */
@@ -85,7 +85,7 @@ public class Compare {
 
     /**
      * すべての文字列のひとつでも空かnullの場合true
-     * 
+     *
      * @param ss
      * @return
      */
@@ -99,7 +99,7 @@ public class Compare {
 
     /**
      * 文字列の長さがmaxより大きい場合true
-     * 
+     *
      * @param s
      * @param max
      * @return
@@ -110,7 +110,7 @@ public class Compare {
 
     /**
      * すべての文字列の長さがmaxより大きい場合true
-     * 
+     *
      * @param max
      * @param ss
      * @return
@@ -127,7 +127,7 @@ public class Compare {
 
     /**
      * 文字列の長さが一つでもmaxより大きい場合true
-     * 
+     *
      * @param max
      * @param ss
      * @return
@@ -142,7 +142,7 @@ public class Compare {
 
     /**
      * 文字列がその正規表現と一致するか
-     * 
+     *
      * @param str
      * @param regex
      * @return
@@ -153,7 +153,7 @@ public class Compare {
 
     /**
      * すべての文字列が正規表現とマッチするか
-     * 
+     *
      * @param regex
      * @param ss
      * @return
@@ -170,7 +170,7 @@ public class Compare {
 
     /**
      * いずれかの文字列が正規表現とマッチするか
-     * 
+     *
      * @param regex
      * @param ss
      * @return
@@ -181,6 +181,44 @@ public class Compare {
                 return true;
         }
         return false;
+    }
+
+    /**
+     * sがいずれかの文字列と一致するか
+     *
+     * @param s
+     *            comparedと比較
+     * @param compared
+     *            sと比較
+     * @return どれとも一致しなかった場合false<br>
+     *         何か一つでも一致した場合はtrue
+     */
+    public static boolean isAnyEquals(String s, String... compared) {
+        for (int i = 0, len = compared.length; i < len; ++i) {
+            if (s.equals(compared[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 全ての文字列が同一か
+     *
+     * @param compared
+     * @return
+     */
+    public static boolean isAllEquals(String... compared) {
+        if (compared.length < 2) {
+            return false;
+        }
+        String key = compared[0];
+        for (int i = 1, len = compared.length; i < len; ++i) {
+            if (!key.equals((key = compared[i]))) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

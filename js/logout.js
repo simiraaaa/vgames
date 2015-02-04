@@ -1,12 +1,6 @@
 var vg = vg || {};
 (function(vg,smr,undefined){
-  vg.set= function(path){
-    if(path[path.length-1]==="/"){
-      this.path=path.substring(0,path.length-1);
-    }else{
-      this.path=path;
-    }
-  };
+  
   smr.define("vg.Button",{
     superClass:smr.dom.Element,
     init:function(text){

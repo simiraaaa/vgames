@@ -1,8 +1,10 @@
 package myclass.servlet;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import myclass.wrap.MyHashMap;
 
@@ -27,6 +29,8 @@ public class Path implements PathMapping {
                 ACREG, VGAMES + ACCOUNT_REGISTRATION,//
                 MYPAGEHTML, VHTML + MYPAGEJAVA,//
                 UPLOAD, VGAMES + GAME_UPLOADER,//
+                UPLOADHTML, VGAMES + UPLOAD_PAGE,//
+                "userdata.json", VGAMES + "json.UserData",//
                 "test.html", VGAMES + "Test");
 
         tempurl.forEach((k, v) -> {
@@ -38,6 +42,10 @@ public class Path implements PathMapping {
             }
         });
 
+    }
+
+    public static void redirectLogin(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        res.sendRedirect(req.getContextPath() + "/login.jsp");
     }
 
     @Override
@@ -59,6 +67,8 @@ public class Path implements PathMapping {
             JSON = ".json",//
             JS_PATH = "js/",//
             SERVLET = "s/",//
+            UPLOADHTML = "upload" + HTML,//
+            UPLOAD_PAGE = "html.UploadPage",
 
             UPLOAD = "gameup" + JSON,//
             GAME_UPLOADER = "GameUploader",//

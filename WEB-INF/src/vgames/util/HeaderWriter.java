@@ -19,6 +19,9 @@ import myclass.html.Html;
 import myclass.html.HtmlWriter;
 import myclass.html.Tag;
 import myclass.servlet.Path;
+import myclass.util.Convert;
+import myclass.util.JSON;
+import myclass.wrap.MyHashMap;
 import vgames.table.Genre;
 import vgames.table.User;
 
@@ -26,6 +29,7 @@ public abstract class HeaderWriter {
 
     protected MyDatabase db = null;
     protected PrintWriter out = null;
+    protected String INCLUDE_PATH;
 
     public HeaderWriter(HttpServletRequest req, HttpServletResponse res, HttpServlet servlet,
             User user, String title) throws IOException {
@@ -33,8 +37,8 @@ public abstract class HeaderWriter {
         db = VGLogin.checkLogin(req, res, user, false);
         final boolean isGuest = user.getId() == null;
 
-        final String CONTEXTPATH = req.getContextPath() + "/", //
-        REALPATH = servlet.getServletContext().getRealPath("/include") + "/";
+        final String CONTEXTPATH = req.getContextPath() + "/"; //
+        INCLUDE_PATH = servlet.getServletContext().getRealPath("/include") + "/";
 
         SQLCreator sc = new SQLCreator(Genre.TABLE_NAME, Genre.NAME).addOrderBy(Genre.ID);
 
@@ -59,13 +63,17 @@ public abstract class HeaderWriter {
                 // TODO 自動生成されたメソッド・スタブ
 
                 write(Html.createLinkCSS(CONTEXTPATH + "css/header.css"));
+                write(Html.createLinkCSS(CONTEXTPATH + "css/common.css"));
 
                 WrapJspWriter.writeScript(out, CONTEXTPATH, Path.JS_PATH, Path.getJsLibs());
 
                 StringJoiner sj = new StringJoiner("','", "['", "'];");
                 genres.forEach(s -> sj.add(s));
                 write(new Tag("script",//
-                "vg.set('" + CONTEXTPATH + "');vg.isGuest=" + String.valueOf(isGuest) + ";vg.GENRE_LIST=" + sj.toString()));
+                "vg.user=" + JSON.stringify(MyHashMap.create("id", user.getId(),//
+                        "name", Convert.escapeHtml(user.getName()),//
+                        "icon", user.getIcon(),//
+                        "prof", user.getProf())) + ";vg.set('" + CONTEXTPATH + "');vg.isGuest=" + String.valueOf(isGuest) + ";vg.GENRE_LIST=" + sj.toString()));
                 writingIntoHead();
 
             }
@@ -74,7 +82,7 @@ public abstract class HeaderWriter {
             public void writingBody() throws IOException {
                 // TODO 自動生成されたメソッド・スタブ
 
-                include(REALPATH + "header.html");
+                includeHtml("header.html");
                 writingIntoBody();
 
             }
@@ -108,6 +116,10 @@ public abstract class HeaderWriter {
         br.lines().forEach(out::print);
         br.close();
         return this;
+    }
+
+    public HeaderWriter includeHtml(String name) throws IOException {
+        return include(INCLUDE_PATH + name);
     }
 
     /**
