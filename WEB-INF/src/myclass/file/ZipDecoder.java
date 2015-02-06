@@ -18,6 +18,9 @@ import java.util.zip.ZipFile;
  *
  */
 public class ZipDecoder {
+    public static void main(String[] args) throws IOException {
+        unzip("C:\\Users\\yuki\\Desktop\\sm.zip", "C:\\ziptest", "008");
+    }
 
     public static void unzip(String inputZipFile) throws IOException {
         ZipDecoder.unzip(inputZipFile, null);
@@ -60,17 +63,18 @@ public class ZipDecoder {
                 // ZipEntry がディレクトリの場合はディレクトリを作成。
                 outFile.mkdirs();
             } else {
-                InputStream inputStream = zip.getInputStream(zipEntry);
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                if (!outFile.getParentFile().exists()) {
-                    // 出力先ファイルの保存先ディレクトリが存在しない場合は、
-                    // ディレクトリを作成しておく。
-                    outFile.getParentFile().mkdirs();
+                try (InputStream inputStream = zip.getInputStream(zipEntry);
+                        BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);) {
+                    if (!outFile.getParentFile().exists()) {
+                        // 出力先ファイルの保存先ディレクトリが存在しない場合は、
+                        // ディレクトリを作成しておく。
+                        outFile.getParentFile().mkdirs();
+                    }
+                    try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(outFile));) {
+                        // 入力ストリームから読み込み、出力ストリームへ書き込む。
+                        ZipDecoder.writeStream(bufferedInputStream, bufferedOutputStream);
+                    }
                 }
-                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(outFile));
-                // 入力ストリームから読み込み、出力ストリームへ書き込む。
-                ZipDecoder.writeStream(bufferedInputStream, bufferedOutputStream);
-
             }
         }
     }

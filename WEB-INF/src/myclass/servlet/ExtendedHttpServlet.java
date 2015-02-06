@@ -103,6 +103,9 @@ public abstract class ExtendedHttpServlet implements ServletWrapper {
      * @return
      */
     public FileItem getFileItem(String key) {
+        if (fileItemMap.isEmpty() || !fileItemMap.containsKey(key)) {
+            return null;
+        }
         return fileItemMap.get(key).get(0);
     }
 
@@ -113,6 +116,9 @@ public abstract class ExtendedHttpServlet implements ServletWrapper {
      * @return
      */
     public ArrayList<FileItem> getFileItems(String key) {
+        if (fileItemMap.isEmpty()) {
+            return null;
+        }
         return fileItemMap.get(key);
     }
 
@@ -144,6 +150,9 @@ public abstract class ExtendedHttpServlet implements ServletWrapper {
      * @return
      */
     public String getFormParam(String key) {
+        if (parameterMap.isEmpty() || !parameterMap.containsKey(key)) {
+            return null;
+        }
         return parameterMap.get(key).get(0);
     }
 
@@ -154,6 +163,9 @@ public abstract class ExtendedHttpServlet implements ServletWrapper {
      * @return
      */
     public ArrayList<String> getFormParams(String key) {
+        if (parameterMap.isEmpty()) {
+            return null;
+        }
         return parameterMap.get(key);
     }
 

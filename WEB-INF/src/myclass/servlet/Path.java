@@ -31,6 +31,8 @@ public class Path implements PathMapping {
                 UPLOAD, VGAMES + GAME_UPLOADER,//
                 UPLOADHTML, VGAMES + UPLOAD_PAGE,//
                 "userdata.json", VGAMES + "json.UserData",//
+                JSONGETTERJSON, VGAMES + JSONGETTER,//
+                EDITHTML, VGAMES + EDIT_PAGE,//
                 "test.html", VGAMES + "Test");
 
         tempurl.forEach((k, v) -> {
@@ -59,7 +61,9 @@ public class Path implements PathMapping {
     }
 
     public static final String//
-            VGAMES = "vgames.",
+            CONTEXT_PATH = "/vgames",
+            GAMES = "/games",//
+            VGAMES = "vgames.",//
             VHTML = VGAMES + "html.",//
             JS = ".js",// ,
             JSP = ".jsp",//
@@ -68,7 +72,11 @@ public class Path implements PathMapping {
             JS_PATH = "js/",//
             SERVLET = "s/",//
             UPLOADHTML = "upload" + HTML,//
-            UPLOAD_PAGE = "html.UploadPage",
+            UPLOAD_PAGE = "html.UploadPage",//
+            JSONGETTER = "json.JsonGetter", //
+            JSONGETTERJSON = "get.json",//
+            EDIT_PAGE = "html.EditPage",//
+            EDITHTML = "edit" + HTML,//
 
             UPLOAD = "gameup" + JSON,//
             GAME_UPLOADER = "GameUploader",//
@@ -121,5 +129,15 @@ public class Path implements PathMapping {
      */
     public static boolean isLocal(HttpServletRequest req) {
         return req.getServerName().indexOf("localhost") != -1 || req.getServerName().indexOf("192.168.121.21") == -1;
+    }
+
+    /**
+     * ゲームのデプロイされているパス
+     *
+     * @param gameid
+     * @return
+     */
+    public static String createGamePath(int gameid) {
+        return CONTEXT_PATH + GAMES + "/" + gameid;
     }
 }

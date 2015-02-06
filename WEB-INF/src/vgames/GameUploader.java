@@ -53,16 +53,19 @@ public class GameUploader extends AjaxResponse {
         _gameid=getFormParam("gameid"),
         title = setEmpty(getFormParam("title")),
         setumei = setEmpty(getFormParam("setumei")),
-        genre = getFormParam("genre");
+        genre = getFormParam("genreid");
         // @formatter:on
         int genreid = Integer.parseInt(genre);
 
-        if (game == null || game.getName().isEmpty()) {
+        boolean isNewGame = Compare.isEmpty(_gameid);
+        boolean isNotUp = game == null || game.getName().isEmpty();
+        if (isNewGame && isNotUp) {
             return "ゲームファイルを指定してください";
         }
-        boolean isNewGame = Compare.isEmpty(_gameid);
 
-        if (isNewGame)
+        if (!isNewGame)
+            gameid = Integer.parseInt(_gameid);
+        else
             gameid = VGDataBase.getMaxGameIDaddOne(db);
 
         if (gameid == -1) {
@@ -71,7 +74,7 @@ public class GameUploader extends AjaxResponse {
 
         String imgName = setImageName(img);
 
-        if (imgName.lastIndexOf(".") != -1) {
+        if (imgName.lastIndexOf(".") == -1) {
             imgName = "defaultSS.png";
         }
 
@@ -79,11 +82,16 @@ public class GameUploader extends AjaxResponse {
             return "画像名の取得に失敗しました。";
         }
 
-        String zipe = Uploader.upGame(game, genreid, imgName);
-        if (zipe != null) {
-            return zipe;
+        if (!isNotUp) {
+
+            String zipe = Uploader.upGame(game, gameid, GAME_PATH);
+            if (zipe != null) {
+                return zipe;
+            }
         }
-        zipe = VGDataBase.insertGame(db, genreid, user.getId(), genreid, title, imgName, setumei);
+        String zipe = isNewGame ? //
+        VGDataBase.insertGame(db, gameid, user.getId(), genreid, title, imgName, setumei) : //
+        VGDataBase.updateGame(db, gameid, user.getId(), genreid, title, imgName, setumei);
         if (zipe != null) {
             return zipe;
         }

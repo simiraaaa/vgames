@@ -8,6 +8,9 @@
 	width:80%;
 	margin: 0 auto;
 }
+.editMessage{
+	display	:	none;
+}
 
 .formname{
 	margin:5px;

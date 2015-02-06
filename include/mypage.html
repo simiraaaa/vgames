@@ -1,9 +1,11 @@
 <div id="user"></div>
-<a id="up">ゲームを投稿する</a>
+<a id="up">ゲームを投稿する</a><br>
+<a id="edit">ゲームを編集する</a>
 <script type="text/javascript">
 (function(d){
   d.g=d.getElementById;
   d.g("user").textContent="ようこそ"+vg.user.name+"さん";
   d.g("up").href = vg.path+"/s/upload.html";
+  d.g("edit").href = vg.path+"/s/edit.html";
 })(document);
 </script>

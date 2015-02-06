@@ -1,0 +1,26 @@
+<div style="width:100%; background:silver;">
+  <div style="text-align:center;">
+    <div id="title"></div>
+    <div>ランキング</div>
+  </div>
+  <div style="margin: 0 auto; width:90%;">
+
+    <div id="top10">
+    </div>
+
+    <div style="text-align:center;">自分の順位</div>
+    <div id="current">
+    </div>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  (function(smr, vg, undefined) {
+    if (!vg || !vg.user ||
+      vg.user.id === undefined || !vg.game ||
+      vg.game.id === undefined)
+      return alert("データの取得に失敗しました。");
+      
+  })(smr, vg);
+</script>

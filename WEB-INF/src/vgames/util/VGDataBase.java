@@ -8,6 +8,8 @@ import myclass.database.MyDatabase;
 import myclass.database.SQLCreator;
 import myclass.util.Compare;
 import vgames.table.Game;
+import vgames.table.Genre;
+import vgames.table.User;
 
 public class VGDataBase {
 
@@ -69,6 +71,24 @@ public class VGDataBase {
         return null;
     }
 
+    public static String updateGame(MyDatabase db, int gameid, String uid, int genreid,
+            String title, String imgName, String setumei) {
+
+        SQLCreator sc = new SQLCreator(Game.TABLE_NAME, User.ID, Genre.ID, Game.NAME, Game.IMG, Game.SETUMEI)//
+        .setWhere(Game.ID + "=? and " + User.ID + "=?");
+
+        try {
+            db.//
+            setPrepareObjects(uid, genreid, title, imgName, setumei, gameid, uid)//
+            .exe(sc.update());
+        } catch (SQLException e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+            return "ゲームの更新に失敗しました。";
+        }
+        return null;
+    }
+
     /**
      * 既存ゲームのIMGソースpath
      *
@@ -77,19 +97,46 @@ public class VGDataBase {
      * @return
      */
     public static String getImgTitle(MyDatabase db, int gameid) {
-        SQLCreator sc = new SQLCreator(Game.TABLE_NAME, Game.IMG).setWhere(Game.ID + "=?");
+        ArrayList<HashMap<String, Object>> list = getGameData(db, gameid, Game.IMG);
+        if (list == null) {
+            return null;
+        }
+        return (String) list.get(0).get(Game.IMG);
+    }
+
+    /**
+     * 指定したフィールドのゲームデータひとつ
+     *
+     * @param db
+     * @param gameid
+     * @param fields
+     * @return
+     */
+    public static ArrayList<HashMap<String, Object>> getGameData(MyDatabase db, int gameid,
+            String... fields) {
+        SQLCreator sc = new SQLCreator(Game.TABLE_NAME, fields).setWhere(Game.ID + "=?");
 
         try {
-            ArrayList<HashMap<String, Object>> list = //
-            db//
+            return db//
             .setPrepareObjects(gameid)//
-            .exe(sc.select(), "[]", Game.IMG).getList();
-            return (String) list.get(0).get(Game.IMG);
+            .exe(sc.select(), "[]", fields).getList();
         } catch (SQLException e) {
             // TODO 自動生成された catch ブロック
             e.printStackTrace();
+            return null;
         }
+    }
 
-        return null;
+    /**
+     * userのゲームのリスト
+     *
+     * @param db
+     * @param userid
+     * @return
+     * @throws SQLException
+     */
+    public static ArrayList<HashMap<String, Object>> getGameList(MyDatabase db, String userid) throws SQLException {
+        SQLCreator sc = new SQLCreator(Game.TABLE_NAME, Game.getFields()).setWhere(User.ID + "=?");
+        return db.setPrepareObjects(userid).exe(sc.select(), "[]", Game.getFields()).getList();
     }
 }
