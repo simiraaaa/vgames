@@ -33,6 +33,7 @@ public class Path implements PathMapping {
                 "userdata.json", VGAMES + "json.UserData",//
                 JSONGETTERJSON, VGAMES + JSONGETTER,//
                 EDITHTML, VGAMES + EDIT_PAGE,//
+                "ranking.json", VGAMES + "json.UserRanking",//
                 "test.html", VGAMES + "Test");
 
         tempurl.forEach((k, v) -> {

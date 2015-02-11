@@ -17,14 +17,20 @@ public class PostScore extends AjaxResponse {
             SUCCESS = "success", ALERT = "alert", TEXT = "text";
 
     private MyDatabase db = null;
-    private User user = null;
+    private int gameid = -1;
+    private String userid = null;
 
     @Override
     protected void ajax(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         // TODO 自動生成されたメソッド・スタブ
+        gameid = getIntParam("gameid");
 
-        user = new User();
+        User user = new User();
         db = VGLogin.checkLogin(req, res, user, true);
+
+        if ((userid = user.getId()) == null) {
+            puts(STATUS, ALERT, TEXT, "ログインしていません");
+        }
 
         String err = run();
         if (err != null) {
