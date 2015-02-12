@@ -34,6 +34,8 @@ public class Path implements PathMapping {
                 JSONGETTERJSON, VGAMES + JSONGETTER,//
                 EDITHTML, VGAMES + EDIT_PAGE,//
                 "ranking.json", VGAMES + "json.UserRanking",//
+                RANKINGHTML, VGAMES + "html.RankingPage",//
+                PLAYHTML, VGAMES + "html.PlayPage",//
                 "test.html", VGAMES + "Test");
 
         tempurl.forEach((k, v) -> {
@@ -78,6 +80,8 @@ public class Path implements PathMapping {
             JSONGETTERJSON = "get.json",//
             EDIT_PAGE = "html.EditPage",//
             EDITHTML = "edit" + HTML,//
+            RANKINGHTML = "ranking" + HTML,//
+            PLAYHTML = "play" + HTML,//
 
             UPLOAD = "gameup" + JSON,//
             GAME_UPLOADER = "GameUploader",//

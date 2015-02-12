@@ -26,7 +26,7 @@ public class UserRanking extends AjaxResponse {
     User user = null;
     int gid = -1;
     boolean isLogin = false;
-    String currentScore = null;
+    int currentScore = -1;
     boolean isNoCurrentScore = false;
 
     private static final int //
@@ -93,24 +93,17 @@ public class UserRanking extends AjaxResponse {
         if (Compare.isEmpty(score)) {
             return "スコアを送信してください";
         }
-        currentScore = score;
+        currentScore = Integer.parseInt(score);
         if (VGDataBase.isNewRank(db, user.getId(), gid)) {
             return VGDataBase.insertRanking(db, user.getId(), gid, score);
 
         }
 
-        try {
-            int rank = getRank();
-            int cRank = VGDataBase.getCurrentRank(db, gid, score);
-            return (rank > cRank) ? //
-            VGDataBase.updateRanking(db, user.getId(), gid, score) : //
-            VGDataBase.updateRanking(db, user.getId(), gid, score, true);
-
-        } catch (SQLException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-            return "rank取得に失敗しました";
+        String err = VGDataBase.updateRanking(db, user.getId(), gid, score);
+        if (err != null) {
+            return err;
         }
+        return VGDataBase.setHighScore(db, gid, user.getId());
 
     }
 
@@ -139,7 +132,7 @@ public class UserRanking extends AjaxResponse {
      */
     private String setCurrentScore() {
         currentScore = VGDataBase.getCurrentScore(db, gid, user.getId());
-        isNoCurrentScore = currentScore == null || currentScore.equals("-0");
+        isNoCurrentScore = currentScore < 0;
         return null;
     }
 
@@ -160,7 +153,7 @@ public class UserRanking extends AjaxResponse {
         }
         setCurrentScore();
         if (isNoCurrentScore) {
-            put(CURRENT, "-0");
+            put(CURRENT, null);
             return null;
         }
         return putCurrent();
@@ -170,7 +163,7 @@ public class UserRanking extends AjaxResponse {
     private String putCurrent() {
         int rank = VGDataBase.getCurrentRank(db, gid, currentScore);
         if (rank == 0) {
-            put(CURRENT, "-0");
+            put(CURRENT, null);
             return null;
         }
 
@@ -193,7 +186,7 @@ public class UserRanking extends AjaxResponse {
         }
 
         list.set(sa, MyHashMap.create("uid", user.getId(), "uicon",//
-                user.getIcon(), "uiname", user.getName(), "score", currentScore,//
+                user.getIcon(), "uname", user.getName(), "score", currentScore,//
                 "rank", rank));
 
         put(CURRENT, list);

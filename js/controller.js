@@ -37,6 +37,7 @@ var vg = vg || {};
 
   vg.getAjax = {
     GET: "get.json",
+    RANK: "ranking.json",
 
     gameup: function(slf) {
       slf = slf || this;
@@ -88,7 +89,107 @@ var vg = vg || {};
 
     game: function(f, gid) {
       vg.ajax(this.GET, {
-        key: "2",
+          key: "2",
+          gameid: gid
+        },
+        function(data) {
+          if (data.status === "success") {
+            f(data.text);
+          } else {
+            alert(data.text);
+          }
+        });
+
+    },
+
+    initRank: function(f, gid) {
+      this.sendScore(f, "-1", gid);
+
+    },
+    sendScore: function(f, score, gid) {
+
+      gid = (gid === undefined) ? vg.game.id : gid;
+      score = score === undefined ? "-1" : score;
+
+      f = f || function() {};
+      vg.ajax(this.RANK, {
+          key: 0,
+          score: score,
+          gameid: gid
+        },
+        function(data) {
+          if (data.status === "success") {
+            f(data.text);
+          } else {
+            alert(data.text);
+          }
+        });
+    },
+
+    getRanking: function(f, gid) {
+
+      gid = (gid === undefined) ? vg.game.id : gid;
+
+      f = f || function() {};
+      vg.ajax(this.RANK, {
+          key: 1,
+          gameid: gid
+        },
+        function(data) {
+          if (data.status === "success") {
+            data.top = data.top || [];
+            data.current = data.current || null;
+            data.current = data.current === "-1" ? null : data.current;
+            f(data.top, data.current);
+          } else {
+            alert(data.text);
+          }
+        });
+
+
+    },
+
+    setumei: function(f, gid) {
+      gid = (gid === undefined) ? vg.game.id : gid;
+
+      f = f || function() {};
+      vg.ajax(this.GET, {
+          key: 3,
+          gameid: gid
+        },
+        function(data) {
+          if (data.status === "success") {
+            f(data.text);
+          } else {
+            alert(data.text);
+          }
+        });
+    },
+
+    search: function(f, query, genreid) {
+      f = f || function() {};
+      vg.ajax(this.GET, {
+          key: 4,
+          query: query,
+          genreid: genreid
+        },
+        function(data) {
+          if (data.status === "success") {
+            f(data.text);
+          } else {
+            alert(data.text);
+          }
+        });
+    },
+
+    save:function(f,data,gid){
+
+      gid = (gid === undefined) ? vg.game.id : gid;
+
+      f = f || function() {};
+
+      vg.ajax(this.GET, {
+        key: 5,
         gameid: gid
       },
       function(data) {
@@ -98,10 +199,33 @@ var vg = vg || {};
           alert(data.text);
         }
       });
+    },
 
+    load:function(f,gid){
+
+      gid = (gid === undefined) ? vg.game.id : gid;
+
+      f = f || function() {};
+
+      vg.ajax(this.GET, {
+        key: 6,
+        gameid: gid
+      },
+      function(data) {
+        if (data.status === "success") {
+          f(data.text);
+        } else {
+          alert(data.text);
+        }
+      });
     },
 
 
+  };
+  vg.path="/vgames";
+  vg.setGameId = function() {
+    vg.game = vg.game || {};
+    vg.game.id = location.pathname.match(/\/[0-9]+\//)[0].slice(1, -1);
   };
 
 })(vg, smr);

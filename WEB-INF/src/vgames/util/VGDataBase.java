@@ -7,6 +7,7 @@ import java.util.HashMap;
 import myclass.database.MyDatabase;
 import myclass.database.SQLCreator;
 import myclass.util.Compare;
+import myclass.util.Convert;
 import vgames.table.Game;
 import vgames.table.Genre;
 import vgames.table.Ranking;
@@ -275,11 +276,11 @@ public class VGDataBase {
      * @param cScore
      * @return
      */
-    public static int getCurrentRank(MyDatabase db, int gid, String cScore) {
+    public static int getCurrentRank(MyDatabase db, int gid, int cScore) {
 
         try {
             ArrayList<HashMap<String, Object>> list = db.setPrepareObjects(gid, cScore)//
-            .exe("select count(*)+1 as rank from vranking where gid=? and score<?", "[]", "rank").getList();
+            .exe("select count(*)+1 as rank from vranking where gid=? and score>?", "[]", "rank").getList();
             if (list == null || list.isEmpty()) {
                 return 0;
             }
@@ -291,19 +292,34 @@ public class VGDataBase {
         }
     }
 
-    public static String getCurrentScore(MyDatabase db, int gid, String uid) {
+    public static String getScore(MyDatabase db, int gid, String uid) {
+        try {
+            ArrayList<HashMap<String, Object>> list = //
+            db.setPrepareObjects(gid, uid).exe("select score from vranking where gid=? and uid=?", "[]", "score").getList();
+            if (list == null || list.isEmpty()) {
+                return null;
+            }
+            return (String) list.get(0).get("score");
+        } catch (SQLException e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static int getCurrentScore(MyDatabase db, int gid, String uid) {
 
         try {
             ArrayList<HashMap<String, Object>> list = //
             db.setPrepareObjects(gid, uid).exe("select currentScore from vranking where gid=? and uid=?", "[]", "currentScore").getList();
             if (list == null || list.isEmpty()) {
-                return null;
+                return -1;
             }
-            return (String) list.get(0).get("currentScore");
+            return (int) list.get(0).get("currentScore");
         } catch (SQLException e) {
             // TODO 自動生成された catch ブロック
             e.printStackTrace();
-            return null;
+            return -1;
         }
 
     }
@@ -321,4 +337,54 @@ public class VGDataBase {
         }
     }
 
+    public static boolean isHighscore(MyDatabase db, String score, String current) throws SQLException {
+
+        ArrayList<HashMap<String, Object>> list = //
+        db.setPrepareObjects(score, current).exe("select uid from vuser where '" + score + "'<'" + current + "' limit 1", "[]", "uid").getList();
+        System.out.println(list);
+        return list != null && !list.isEmpty();
+
+    }
+
+    public static String setHighScore(MyDatabase db, int gid, String uid) {
+        try {
+            db.setPrepareObjects(gid, uid).exe("UPDATE vranking SET `score`=`currentScore` WHERE gid=? and uid=? and `score`<`currentScore`");
+            return null;
+        } catch (SQLException e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+            return "更新失敗";
+        }
+    }
+
+    /**
+     * 検索
+     *
+     * @param db
+     * @param query
+     * @return
+     * @throws SQLException
+     */
+    public static ArrayList<HashMap<String, Object>> queryGame(MyDatabase db, String query) throws SQLException {
+        char wild = '%';
+        SQLCreator sc = new SQLCreator(Game.TABLE_NAME, Game.getFields()).addLike(Game.NAME);
+        return db.setPrepareObjects(wild + Convert.escapeWildcard(query) + wild).exe(sc.select(), "[]", Game.getFields()).getList();
+
+    }
+
+    /**
+     * 検索
+     *
+     * @param db
+     * @param query
+     * @return
+     * @throws SQLException
+     */
+    public static ArrayList<HashMap<String, Object>> queryGame(MyDatabase db, String query,
+            int genreid) throws SQLException {
+        char wild = '%';
+        SQLCreator sc = new SQLCreator(Game.TABLE_NAME, Game.getFields()).setWhere("genreid=? and ").addLike(Game.NAME);
+        return db.setPrepareObjects(genreid, wild + Convert.escapeWildcard(query) + wild).exe(sc.select(), "[]", Game.getFields()).getList();
+
+    }
 }

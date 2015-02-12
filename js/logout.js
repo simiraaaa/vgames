@@ -1,6 +1,6 @@
 var vg = vg || {};
 (function(vg,smr,undefined){
-  
+
   smr.define("vg.Button",{
     superClass:smr.dom.Element,
     init:function(text){
@@ -22,7 +22,7 @@ var vg = vg || {};
           dataType:"json",
           url:vg.path+"/s/logout.json",
           success:function(data){
-            smr.global.location.href=data.url;
+            smr.global.location.href="/vgames/s/mypage.html";
           }
         });
       };

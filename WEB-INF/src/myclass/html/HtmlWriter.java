@@ -80,7 +80,7 @@ public abstract class HtmlWriter {
      */
     public HtmlWriter include(String realPath) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(realPath));
-        br.lines().forEach(out::print);
+        br.lines().forEach(out::println);
         br.close();
         return this;
     }
@@ -92,7 +92,7 @@ public abstract class HtmlWriter {
      * @return
      */
     public HtmlWriter write(String s) {
-        out.print(s);
+        out.println(s);
         return this;
     }
 
@@ -118,7 +118,7 @@ public abstract class HtmlWriter {
      * @return
      */
     public HtmlWriter write(Tag t, boolean isStart) {
-        out.print(t.create(isStart));
+        out.println(t.create(isStart));
         return this;
     }
 }

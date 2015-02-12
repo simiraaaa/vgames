@@ -1,4 +1,3 @@
-
 package myclass.database;
 
 import myclass.wrap.MyArray;
@@ -37,7 +36,8 @@ public class SQLforMySQL {
     LIMIT = "limit",
     ORDER = "ORDER",
     GROUP = "GROUP",
-    BY = "BY";
+    BY = "BY",
+    LIKE="LIKE";
 // @formatter:on
     /**
      * CREATE文
@@ -53,7 +53,7 @@ public class SQLforMySQL {
 
     /**
      * CREATE文
-     * 
+     *
      * @param tableName
      * @param colsAndDataType
      *            カラム名 データ型 [オプション],,,,,
@@ -65,7 +65,7 @@ public class SQLforMySQL {
 
     /**
      * ドロップ文　テーブルを消す
-     * 
+     *
      * @param tableName
      * @return
      */
@@ -75,7 +75,7 @@ public class SQLforMySQL {
 
     /**
      * mysqldumpバックアップ用sqlファイルを出力する
-     * 
+     *
      * @param user
      * @param pass
      * @param dbName
@@ -88,7 +88,7 @@ public class SQLforMySQL {
 
     /**
      * 復元もしくはインポート
-     * 
+     *
      * @param user
      * @param pass
      * @param dbName
@@ -178,8 +178,7 @@ public class SQLforMySQL {
      *            WHERE句
      * @return
      */
-    public final static String update(String tableName, String col, String val,
-            String where) {
+    public final static String update(String tableName, String col, String val, String where) {
         return UPDATE + SPACE + SET + SPACE + createSet(col, val) + SPACE + WHERE + SPACE + where;
     }
 
@@ -191,8 +190,7 @@ public class SQLforMySQL {
      *            WHERE句
      * @return
      */
-    public final static String update(String tableName, String[] cols, String[] vals,
-            String where) {
+    public final static String update(String tableName, String[] cols, String[] vals, String where) {
         return UPDATE + SPACE + tableName + SPACE + SET + SPACE + createSet(cols, vals) + SPACE + WHERE + SPACE + where;
     }
 
@@ -231,7 +229,6 @@ public class SQLforMySQL {
     public final static String update(String tableName, String[] cols) {
         return UPDATE + SPACE + tableName + SPACE + SET + SPACE + createSet(cols);
     }
-
 
     /**
      * col=valな文字列
@@ -299,8 +296,7 @@ public class SQLforMySQL {
      * @return
      */
     public final static String select(String tableName, String[] cols, String where) {
-        return SELECT + SPACE + createCols(false, cols) + SPACE + FROM + SPACE + tableName + SPACE
-                + WHERE + SPACE + where;
+        return SELECT + SPACE + createCols(false, cols) + SPACE + FROM + SPACE + tableName + SPACE + WHERE + SPACE + where;
     }
 
     /**
@@ -416,7 +412,7 @@ public class SQLforMySQL {
 
     /**
      * limit
-     * 
+     *
      * @param start
      * @param size
      * @return
@@ -427,7 +423,7 @@ public class SQLforMySQL {
 
     /**
      * limit
-     * 
+     *
      * @param size
      * @return
      */
@@ -437,7 +433,7 @@ public class SQLforMySQL {
 
     /**
      * order by
-     * 
+     *
      * @param cols
      *            ソートするカラムとオプション
      * @return
@@ -448,12 +444,33 @@ public class SQLforMySQL {
 
     /**
      * group by
-     * 
+     *
      * @param cols
      * @return
      */
     public static String groupBy(String cols) {
         return SPACE + GROUP + SPACE + BY + SPACE + cols;
+    }
+
+    /**
+     * id like value
+     *
+     * @param id
+     * @param value
+     * @return
+     */
+    public static String like(String id, String value) {
+        return SPACE + id + SPACE + LIKE + SPACE + value;
+    }
+
+    /**
+     * id like ?
+     *
+     * @param id
+     * @return
+     */
+    public static String like(String id) {
+        return SPACE + id + SPACE + LIKE + SPACE + HATENA;
     }
 
 }

@@ -113,7 +113,7 @@ public abstract class HeaderWriter {
      */
     public HeaderWriter include(String realPath) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(realPath));
-        br.lines().forEach(out::print);
+        br.lines().forEach(out::println);
         br.close();
         return this;
     }
@@ -129,7 +129,7 @@ public abstract class HeaderWriter {
      * @return
      */
     public HeaderWriter write(String s) {
-        out.print(s);
+        out.println(s);
         return this;
     }
 
@@ -142,7 +142,7 @@ public abstract class HeaderWriter {
      * @return
      */
     public HeaderWriter write(Tag t) {
-        out.print(t.create());
+        out.println(t.create());
         return this;
     }
 
@@ -155,7 +155,7 @@ public abstract class HeaderWriter {
      * @return
      */
     public HeaderWriter write(Tag t, boolean isStart) {
-        out.print(t.create(isStart));
+        out.println(t.create(isStart));
         return this;
     }
 

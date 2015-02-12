@@ -1,15 +1,16 @@
-<div style="width:100%; background:silver;">
+<div style="width:100%;border-radius:15px; background:#eee; padding:5px 0;">
   <div style="text-align:center;">
     <div id="title"></div>
     <div>ランキング</div>
   </div>
   <div style="margin: 0 auto; width:90%;">
 
-    <div id="top10">
+    <div style="text-align:center;">TOP10</div>
+    <div id="top10" style="margin: 0 auto;">
     </div>
 
-    <div style="text-align:center;">自分の順位</div>
-    <div id="current">
+    <div style="text-align:center;">現在の自分の順位</div>
+    <div id="current" style="margin: 0 auto;">
     </div>
 
   </div>
@@ -17,10 +18,94 @@
 
 <script type="text/javascript">
   (function(smr, vg, undefined) {
-    if (!vg || !vg.user ||
-      vg.user.id === undefined || !vg.game ||
-      vg.game.id === undefined)
+    if (!vg || !vg.game ||
+      vg.game.id === undefined) {
       return alert("データの取得に失敗しました。");
-      
+    }
+    var Element = smr.dom.Element;
+    Element(document.getElementById("header")).remove();
+    var top10div = Element(document.getElementById("top10"));
+    var currentDiv = Element(document.getElementById("current"));
+    //rank ->name->score
+    var nameSpan = Element("div").styleSetter({
+      width: "25%",
+      textAlign: "right",
+      margin: "0 5px",
+      display: "inline-block"
+    });
+    var rankSpan = Element("div").styleSetter({
+      width: "15%",
+      textAlign: "right",
+      margin: "0 5px",
+      display: "inline-block"
+    });
+    var scoreSpan = Element("div").styleSetter({
+      width: "45%",
+      textAlign: "right",
+      margin: "0 5px",
+      display: "inline-block"
+    });
+    var rankingDiv = Element("div")
+      .styleSetter({
+        width: "80%",
+        margin: "5px auto"
+      });
+
+    var cloneRankingDiv = function(rank, name, score) {
+      return rankingDiv.clone()
+        .append(
+          rankSpan.clone().elementSetter({
+            textContent: rank
+          })
+      ).append(
+        nameSpan.clone().elementSetter({
+          textContent: name
+        })
+      ).append(
+        scoreSpan.clone().elementSetter({
+          textContent: score
+        })
+      );
+    };
+
+    var ownStyle = {
+      color: "blue",
+      fontWeight: "bold"
+    };
+
+    var deleteRanking = function() {
+      top10div.removeChildAll();
+      currentDiv.removeChildAll();
+    };
+    var showRanking = function(top, current) {
+      deleteRanking();
+      if (top) top.forEach(function(o) {
+        var c = cloneRankingDiv(o.rank, o.uname, o.score);
+        if (o.uid === vg.user.id) {
+          c.styleSetter(ownStyle);
+        }
+        c.appendTo(top10div);
+      });
+      if (current) current.forEach(function(o) {
+        var c = cloneRankingDiv(o.rank, o.uname, o.score);
+        if (o.uid === vg.user.id) {
+          c.styleSetter(ownStyle);
+        }
+        c.appendTo(currentDiv);
+      });
+
+    };
+
+    var ajaxRanking = function() {
+      vg.getAjax.getRanking(showRanking);
+    };
+
+    vg.getAjax.initRank(
+      function() {
+        ajaxRanking();
+        setInterval(ajaxRanking, 3000);
+      }
+    );
+
   })(smr, vg);
 </script>

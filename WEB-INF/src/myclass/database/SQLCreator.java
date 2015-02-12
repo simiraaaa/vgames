@@ -10,9 +10,7 @@ public class SQLCreator {
 
     private String[] columns;
 
-    public SQLCreator() {
-    }
-
+    public SQLCreator() {}
 
     public SQLCreator(String tableName) {
         setTable(tableName);
@@ -135,8 +133,7 @@ public class SQLCreator {
      */
     public final String select() {
         checkOption();
-        return Compare.isEmpty(whr) ? SQLforMySQL.select(table, columns) + option
-                : SQLforMySQL.select(table, columns, whr)+option;
+        return Compare.isEmpty(whr) ? SQLforMySQL.select(table, columns) + option : SQLforMySQL.select(table, columns, whr) + option;
     }
 
     private void checkOption() {
@@ -145,9 +142,15 @@ public class SQLCreator {
         }
     }
 
+    private void checkWhere() {
+        if (whr == null) {
+            whr = "";
+        }
+    }
+
     /**
      * order byを追加
-     * 
+     *
      * @param cols
      * @return
      */
@@ -168,7 +171,7 @@ public class SQLCreator {
 
     /**
      * limit追加
-     * 
+     *
      * @param start
      * @param size
      * @return
@@ -181,13 +184,40 @@ public class SQLCreator {
 
     /**
      * limit追加
-     * 
+     *
      * @param size
      * @return
      */
     public SQLCreator addLimit(int size) {
         checkOption();
         option += SQLforMySQL.limit(size);
+        return this;
+    }
+
+    /**
+     * likeをwhereのあとに追加<br>
+     * id like value
+     *
+     * @param id
+     * @param value
+     * @return
+     */
+    public SQLCreator addLike(String id, String value) {
+        checkWhere();
+        whr += SQLforMySQL.like(id, value);
+        return this;
+    }
+
+    /**
+     * likeをwhereのあとに追加<br>
+     * id like ?
+     *
+     * @param id
+     * @return
+     */
+    public SQLCreator addLike(String id) {
+        checkWhere();
+        whr += SQLforMySQL.like(id);
         return this;
     }
 
