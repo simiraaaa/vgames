@@ -10,7 +10,9 @@ import myclass.util.Compare;
 import myclass.util.Convert;
 import vgames.table.Game;
 import vgames.table.Genre;
+import vgames.table.MyList;
 import vgames.table.Ranking;
+import vgames.table.Save;
 import vgames.table.User;
 
 public class VGDataBase {
@@ -386,5 +388,128 @@ public class VGDataBase {
         SQLCreator sc = new SQLCreator(Game.TABLE_NAME, Game.getFields()).setWhere("genreid=? and ").addLike(Game.NAME);
         return db.setPrepareObjects(genreid, wild + Convert.escapeWildcard(query) + wild).exe(sc.select(), "[]", Game.getFields()).getList();
 
+    }
+
+    /**
+     * データをロード
+     *
+     * @param db
+     * @param gid
+     * @param uid
+     * @return
+     * @throws SQLException
+     */
+    public static String loadData(MyDatabase db, int gid, String uid) throws SQLException {
+
+        ArrayList<HashMap<String, Object>> list = //
+        db.setPrepareObjects(gid, uid).exe("select data from vsavedata where gid=? and uid=?", "[]", "data").getList();
+        if (list == null || list.isEmpty())
+            return null;
+        return (String) list.get(0).get("data");
+
+    }
+
+    /**
+     * データをセーブ
+     *
+     * @param db
+     * @param gid
+     * @param uid
+     * @param data
+     * @throws SQLException
+     */
+    public static void saveData(MyDatabase db, int gid, String uid, String data) throws SQLException {
+
+        String list = loadData(db, gid, uid);
+        if (list == null) {
+
+            SQLCreator sc = new SQLCreator(Save.TABLE_NAME, Save.getFields());
+            db.setPrepareObjects(gid, uid, data).exe(sc.insert());
+        } else {
+
+            SQLCreator sc = new SQLCreator(Save.TABLE_NAME, Save.DATA).setWhere(Game.ID + "=? and " + User.ID + "=?");
+            db.setPrepareObjects(data, gid, uid).exe(sc.update());
+        }
+
+    }
+
+    /**
+     * お気に入りに登録
+     *
+     * @param db
+     * @param gid
+     * @param uid
+     * @throws SQLException
+     */
+    public static void fav(MyDatabase db, int gid, String uid) throws SQLException {
+        SQLCreator sc = new SQLCreator(MyList.TABLE_NAME, MyList.getFields());
+        db.setPrepareObjects(gid, uid).exe(sc.insert());
+    }
+
+    /**
+     * お気に入りをしているか
+     *
+     * @param db
+     * @param gid
+     * @param uid
+     * @return
+     */
+    public static boolean isFav(MyDatabase db, int gid, String uid) {
+        SQLCreator sc = new SQLCreator(MyList.TABLE_NAME, MyList.getFields()).setWhere(MyList.ID + "=? and " + MyList.UID + "=?");
+        try {
+            ArrayList<HashMap<String, Object>> list = db.setPrepareObjects(gid, uid).exe(sc.select(), "[]", MyList.getFields()).getList();
+
+            return list != null && !list.isEmpty();
+        } catch (SQLException e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * お気に入りのリストを取得
+     *
+     * @param db
+     * @param gid
+     * @return
+     * @throws SQLException
+     */
+    public static ArrayList<HashMap<String, Object>> getFavList(MyDatabase db, String uid) throws SQLException {
+
+        return //
+        db//
+        .setPrepareObjects(uid)//
+        .exe("select g.gid as gid,g.gname as gname,g.gimage as gimage,g.gplay as gplay,g.gfav as gfav,g.gsetumei as gsetumei from vmylist ,vgame as g where vmylist.gid=g.gid and vmylist.uid=?", "[]", "gid", "gname", "gimage", "gplay", "gfav", "gsetumei")//
+        .getList();
+
+    }
+
+    /**
+     *
+     * @param db
+     * @param uid
+     * @return
+     */
+    public static User getUser(MyDatabase db, String uid) {
+        User user = new User();
+
+        try {
+            ArrayList<HashMap<String, Object>> list = //
+            db.setPrepareObjects(uid)//
+            .exe(new SQLCreator(User.TABLE_NAME, User.getFields())//
+            .setWhere(User.ID + "=?").select(), "[]", User.getFields())//
+            .getList();
+
+            if (list == null || list.isEmpty()) {
+                return null;
+            }
+            user.setAll(list);
+            return user;
+        } catch (SQLException e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+            return null;
+        }
     }
 }

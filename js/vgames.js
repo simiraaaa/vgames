@@ -84,59 +84,59 @@ var vg = vg || {};
 
     var gamepath = vg.path + "/s/play.html?gameid=";
 
-    var glist;
 
-    var createList = function(gdata) {
-      var div = Element("div").styleSetter({
-        cssFloat: "left",
-        margin: "5px",
-        width: "250px",
-        height: "250px",
-        background: "#eee",
-        borderBottom: "1px solid gray",
-        borderRight: "1px solid gray",
-        borderRadius: "10px"
-      });
-      var a = div
-        .create("a")
-        .elementSetter({
-          href: gamepath + gdata.gid
-        }).styleSetter({
-          width: "100%",
-          height: "100%",
-          position: "relative",
-          margin: "auto"
-        });
-      a.create("div")
-        .styleSetter({
-          position: "relative",
-          margin: "auto",
+    vg.getCreateList = function(glist) {
+      return function(gdata) {
+        var div = Element("div").styleSetter({
+          cssFloat: "left",
+          margin: "5px",
           width: "250px",
-          height: "220px"
-        })
-        .create("img").styleSetter({
-          margin: "auto",
-          maxHeight: "200px",
-          maxWidth: "200px",
-          position: "absolute",
-          left: "0",
-          right: "0",
-          top: "0",
-          bottom: "0",
-        }).elementSetter({
-          src: vg.path + "/games/" + gdata.gimage
+          height: "250px",
+          background: "#eee",
+          borderBottom: "1px solid gray",
+          borderRight: "1px solid gray",
+          borderRadius: "10px"
         });
-      a.create("div")
-        .styleSetter({
-          width: "250px",
-          position: "relative",
-          top: "5px",
-          textAlign: "center"
-        }).element.textContent = gdata.gname;
-      glist.append(div);
+        var a = div
+          .create("a")
+          .elementSetter({
+            href: gamepath + gdata.gid
+          }).styleSetter({
+            width: "100%",
+            height: "100%",
+            position: "relative",
+            margin: "auto"
+          });
+        a.create("div")
+          .styleSetter({
+            position: "relative",
+            margin: "auto",
+            width: "250px",
+            height: "220px"
+          })
+          .create("img").styleSetter({
+            margin: "auto",
+            maxHeight: "200px",
+            maxWidth: "200px",
+            position: "absolute",
+            left: "0",
+            right: "0",
+            top: "0",
+            bottom: "0",
+          }).elementSetter({
+            src: vg.path + "/games/" + gdata.gimage
+          });
+        a.create("div")
+          .styleSetter({
+            width: "250px",
+            position: "relative",
+            top: "5px",
+            textAlign: "center"
+          }).element.textContent = gdata.gname;
+        glist.append(div);
 
+      };
     };
-
     var searchFunc = function(data) {
       body.removeChildAll();
       h.appendTo();
@@ -149,10 +149,10 @@ var vg = vg || {};
       });
       var divin = div.create("div");
       divin.element.className = "dbodyin";
-      glist = divin.create("div");
+      var glist = divin.create("div");
       glist.element.id = "gamelist";
 
-      data.forEach(createList);
+      data.forEach(vg.getCreateList(glist));
 
     };
     var searchAjax = function() {

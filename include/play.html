@@ -2,12 +2,22 @@
   <div style="margin:0 auto; width:100%;height:100%;">
     <iframe id="game" src="" width="59%" height="80%" style="border:0; padding:0; margin:0;"></iframe>
     <iframe id="ranking" src="" width="39%" height="80%" style="border:0; padding:0; margin:0;"></iframe>
-
+	<div>
+	created&nbsp;by&nbsp;<a href="" id="creator"></a>
+	</div>
     <button type="button" onclick="var s=document.getElementById('setumei').style;var v=s.visibility;var isHidden=(v==='hidden'); s.visibility=isHidden?'visible':'hidden'; this.textContent=isHidden?'説明を隠す':'説明を表示';">
-      説明を隠す
+    説明を隠す
     </button>
-    <button onclick="alert('一時停止中です');">一時停止</button>
-    <button onclick="if(confirm('ゲームをリロードしますか?')){document.getElementById('game').src = vg.path + '/games/' + vg.game.id + '/index.html';};">再読込</button>
+    <button onclick="alert('一時停止中です');">
+    一時停止
+    </button>
+    <button onclick="if(confirm('ゲームをリロードしますか?')){document.getElementById('game').src = vg.path + '/games/' + vg.game.id + '/index.html';};">
+    再読込
+    </button>
+
+    <button type="button" id="favbutton">
+    お気に入りに登録
+    </button>
     <div id="setumei">
     </div>
   </div>
@@ -24,7 +34,32 @@
     vg.getAjax.setumei(function(d) {
       document.getElementById("setumei").innerHTML = d;
     }, vg.game.id);
-    document.getElementById("game").src = vg.path + "/games/" + vg.game.id + "/index.html";
+   var game= document.getElementById("game");
+   game.src = vg.path + "/games/" + vg.game.id + "/index.html";
+   game.focus();
     document.getElementById("ranking").src = vg.path + "/s/ranking.html?gameid=" + vg.game.id;
+
+    var fvb = document.getElementById("favbutton");
+    if(vg.isGuest){
+        return smr.dom.Element(fvb).remove();
+    }
+
+    vg.getAjax.isFav(function(){
+        fvb.textContent = "お気に入り登録済み";
+        fvb.disabled=true;
+        fvb.onclick=function(){};
+    });
+
+    fvb.onclick=function(){
+        this.disabled=true;
+        this.textContent = "お気に入り登録済み";
+        fvb.onclick=function(){};
+        vg.getAjax.fav();
+    };
+
+    var creator= document.getElementById("creator");
+    creator.href = vg.path+"/s/mypage.html#"+vg.game.uid;
+    creator.textContent=vg.game.uname;
+
   }(smr, vg);
 </script>

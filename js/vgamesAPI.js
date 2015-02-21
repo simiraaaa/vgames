@@ -1938,6 +1938,14 @@ var smr = smr || {};
 
 })(smr);
 
+
+
+
+
+
+
+
+
 var vg = vg || {};
 
 (function(vg, smr, undefined) {
@@ -2047,7 +2055,6 @@ var vg = vg || {};
 
     },
     sendScore: function(f, score, gid) {
-
       gid = (gid === undefined) ? vg.game.id : gid;
       score = score === undefined ? "-1" : score;
 
@@ -2104,14 +2111,79 @@ var vg = vg || {};
             alert(data.text);
           }
         });
-    }
+    },
+
+    search: function(f, query, genreid) {
+      f = f || function() {};
+      vg.ajax(this.GET, {
+          key: 4,
+          query: query,
+          genreid: genreid
+        },
+        function(data) {
+          if (data.status === "success") {
+            f(data.text);
+          } else {
+            alert(data.text);
+          }
+        });
+    },
+
+    save: function( data,f, gid) {
+
+      gid = (gid === undefined) ? vg.game.id : gid;
+
+      if(gid===undefined)return console.error("gamaeIdが見つかりません");
+      f = f || function() {};
+
+      vg.ajax(this.GET, {
+          key: 5,
+          gameid: gid,
+          data: JSON.stringify(data)
+        },
+        function(data) {
+          if (data.status === "success") {
+            f(data.text);
+          } else {
+            alert(data.text);
+          }
+        });
+    },
+
+    load: function(f, gid) {
+
+      gid = (gid === undefined) ? vg.game.id : gid;
+      if(gid===undefined)return console.error("gamaeIdが見つかりません");
+      f = f || function() {};
+
+      vg.ajax(this.GET, {
+          key: 6,
+          gameid: gid
+        },
+        function(data) {
+          if (data.status === "success") {
+            try{
+              data.data = JSON.parse(data.data);
+            }catch(e){
+              console.error(e);
+            }
+            var sd={
+              login:data.login,
+              data:data.data!=="undefined"?data.data:null
+            };
+            f(sd);
+          } else {
+            alert(data.text);
+          }
+        });
+    },
 
 
   };
-
-  vg.path="/vgames";
+  vg.path = "/vgames";
   vg.setGameId = function() {
     vg.game = vg.game || {};
     vg.game.id = location.pathname.match(/\/[0-9]+\//)[0].slice(1, -1);
   };
+
 })(vg, smr);

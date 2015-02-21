@@ -1,83 +1,103 @@
+<script charset="utf-8">
+  (function(vg) {
+    vg.isMypage = !location.hash;
+    if (vg.isGuest && vg.isMypage) {
+      return location.replace(vg.path + "/login.jsp");
+    }
+  })(vg);
+</script>
 <div class="dbody">
   <div class="dbodyin">
 
 
-    <div id="user"></div>
-    <a id="up">ゲームを投稿する</a>
+    <div id="user"> &nbsp; </div>
+    <a class="dispnone" id="up">ゲームを投稿する</a>
     <br>
-    <a id="edit">ゲームを編集する</a>
-    <div style="font-size:1.5em; text-align:center;">
+    <a class="dispnone" id="edit">ゲームを編集する</a>
+    <button type="button" id="toggleButton">お気に入りを表示</button>
+    <div id="listheader" style="font-size:1.5em; text-align:center;">
       投稿したゲーム一覧
     </div>
     <div id="gamelist">
 
     </div>
+
   </div>
 </div>
+</div>
 <script type="text/javascript">
-  (function(d) {
-    d.g = d.getElementById;
-    d.g("user").textContent = "ようこそ" + vg.user.name + "さん";
-    d.g("up").href = vg.path + "/s/upload.html";
-    d.g("edit").href = vg.path + "/s/edit.html";
-  })(document);
-
   (function(smr, vg, undefined) {
-    var Element = smr.dom.Element;
-    var glist = Element(document.getElementById("gamelist"));
-    var gamepath = vg.path + "/s/play.html?gameid=";
-    vg.getAjax.gameList(function(list) {
-      list.forEach(function(gdata) {
-        var div = Element("div").styleSetter({
-          cssFloat: "left",
-          margin: "5px",
-          width: "250px",
-          height: "250px",
-          background: "#eee",
-          borderBottom: "1px solid gray",
-          borderRight: "1px solid gray",
-          borderRadius: "10px"
-        });
-        var a = div
-          .create("a")
-          .elementSetter({
-            href: gamepath + gdata.gid
-          }).styleSetter({
-            width: "100%",
-            height: "100%",
-            position: "relative",
-            margin: "auto"
-          });
-        a.create("div")
-          .styleSetter({
-            position: "relative",
-            margin: "auto",
-            width: "250px",
-            height: "220px"
-          })
-          .create("img").styleSetter({
-            margin: "auto",
-            maxHeight: "200px",
-            maxWidth: "200px",
-            position: "absolute",
-            left: "0",
-            right: "0",
-            top: "0",
-            bottom: "0",
-          }).elementSetter({
-            src: vg.path + "/games/" + gdata.gimage
-          });
-        a.create("div")
-          .styleSetter({
-            width: "250px",
-            position: "relative",
-            top: "5px",
-            textAlign: "center"
-          }).element.textContent = gdata.gname;
-        glist.append(div);
+    var user =null;
 
-      });
-    }, vg.user.id);
+    var run = function(){
+      (function(d) {
+        d.g = d.getElementById;
+        d.g("user").textContent = user.name;
+        var up=d.g("up");
+        var edit= d.g("edit");
+        if(vg.isMypage){
+            up.href = vg.path + "/s/upload.html";
+            edit.href = vg.path + "/s/edit.html";
+            edit.className= up.className="";
 
+        }else{
+            smr.dom.Element(up).remove();
+            smr.dom.Element(edit).remove();
+        }
+
+
+      })(document);
+
+      var Element = smr.dom.Element;
+      var glist = Element(document.getElementById("gamelist"));
+      var gamepath = vg.path + "/s/play.html?gameid=";
+
+      var tbutton = Element(document.g("toggleButton"));
+
+      var createGameList = function() {
+        vg.getAjax.gameList(function(list) {
+          list.forEach(vg.getCreateList(glist));
+          tbutton.show();
+        }, user.id);
+      };
+
+      var createFavList = function() {
+        vg.getAjax.favlist(function(list) {
+          list.forEach(vg.getCreateList(glist));
+          tbutton.show();
+        }, user.id);
+      };
+
+
+      createGameList();
+      var listheader = document.g("listheader");
+
+      tbutton.element.onclick = function() {
+
+        glist.removeChildAll();
+        tbutton.hide();
+        if (this.isFav) {
+          this.textContent = "お気に入りを表示";
+          listheader.textContent = "投稿したゲーム一覧";
+          createGameList();
+        } else {
+          this.textContent = "投稿したゲームを表示";
+          listheader.textContent = "お気に入りゲーム一覧";
+          createFavList();
+        }
+        this.isFav = !this.isFav;
+      };
+    };
+
+    if (vg.isMypage) {
+      user = vg.user;
+      run();
+    }else{
+      vg.getAjax.getUser(function(_user){
+        if(!_user)return location.replace(vg.path+"/login.jsp");
+        user=_user;
+        run();
+      },location.hash.substring(1));
+    }
   })(smr, vg);
 </script>

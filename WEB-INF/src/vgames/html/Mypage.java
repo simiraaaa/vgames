@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import myclass.database.MyDatabase;
 import myclass.servlet.ExtendedHttpServlet;
-import myclass.servlet.Path;
 import vgames.table.User;
 import vgames.util.HeaderWriter;
 
@@ -32,11 +31,6 @@ public class Mypage extends ExtendedHttpServlet {
                 include(servlet.getServletContext().getRealPath("/include/mypage.html"));
             }
         }.getDb();
-
-        if (user.getId() == null) {
-
-            Path.redirectLogin(req, res);
-        }
         db.close();
 
     }

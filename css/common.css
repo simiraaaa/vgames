@@ -45,3 +45,11 @@
 .attention{
 	font-size: 0.7em;
 }
+
+.hide{
+	visibility: hidden;
+}
+
+.dispnone{
+	display: none;
+}

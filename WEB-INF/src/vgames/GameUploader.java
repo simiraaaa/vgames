@@ -55,6 +55,8 @@ public class GameUploader extends AjaxResponse {
         setumei = setEmpty(getFormParam("setumei")),
         genre = getFormParam("genreid");
         // @formatter:on
+        if ("all".equals(genre))
+            genre = "0";
         int genreid = Integer.parseInt(genre);
 
         boolean isNewGame = Compare.isEmpty(_gameid);

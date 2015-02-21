@@ -220,6 +220,70 @@ var vg = vg || {};
       });
     },
 
+    recent:function(f){
+
+    },
+
+    favlist:function(f,uid){
+      vg.ajax(this.GET,{
+        key:8,
+        userid:uid
+      },
+      function(data){
+        if(data.status ==="success"){
+          f&&f(data.text);
+        }else{
+          console.log(data.text);
+        }
+      });
+
+    },
+
+    //お気に入りの時だけ実行
+    isFav : function(f,gid){
+      gid=gid===undefined?vg.game.id:gid;
+      vg.ajax(this.GET,{
+        key:9,
+        gameid:gid
+      },
+      function(data){
+        if(data.status ==="success"){
+          data.text &&f&&f();
+        }else{
+          console.log(data.text);
+        }
+      });
+    },
+
+    fav:function(f,gid){
+      gid=gid===undefined?vg.game.id:gid;
+      vg.ajax(this.GET,{
+        key:10,
+        gameid:gid
+      },
+      function(data){
+        if(data.status ==="success"){
+          f&&f(data.text);
+        }else{
+          console.log(data.text);
+        }
+      });
+    },
+
+    getUser: function(f,uid){
+      vg.ajax(this.GET,{
+        key:11,
+        userid:uid
+      },
+      function(data){
+        if(data.status ==="success"){
+          f&&f(data.text);
+        }else{
+          console.log(data.text);
+        }
+      });
+    },
+
 
   };
   vg.path="/vgames";
