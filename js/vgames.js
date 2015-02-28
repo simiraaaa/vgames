@@ -110,7 +110,6 @@ var vg = vg || {};
         a.create("div")
           .styleSetter({
             position: "relative",
-            margin: "auto",
             width: "250px",
             height: "220px"
           })

@@ -53,3 +53,36 @@
 .dispnone{
 	display: none;
 }
+
+.user{
+	background: silver;
+	border-radius:15px;
+	padding:10px;
+}
+
+.iconDiv{
+	position:relative;
+	width:220px;
+	height:220px;
+	float:left;
+}
+
+.iconDiv img{
+	margin:auto;
+	max-height:200px;
+	max-width:200px;
+	position:absolute;
+	left:0;
+	top:0;
+	bottom:0;
+	right:0;
+}
+
+.user .name{
+	font-size:1.2em;
+	margin:5px;
+}
+
+.user .prof{
+	margin:5px;
+}

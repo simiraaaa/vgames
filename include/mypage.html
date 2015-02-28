@@ -10,7 +10,21 @@
   <div class="dbodyin">
 
 
-    <div id="user"> &nbsp; </div>
+    <div id="user">
+
+	<div class="user">
+
+	<div class="icon">
+	<img alt="icon" src="/vgames/user/default.png" id="usericon">
+
+
+	</div>
+	<div class="name">name</div>
+	<div class="prof">profprofprofprof</div>
+
+	</div>
+
+	 </div>
     <a class="dispnone" id="up">ゲームを投稿する</a>
     <br>
     <a class="dispnone" id="edit">ゲームを編集する</a>
@@ -39,10 +53,6 @@
             up.href = vg.path + "/s/upload.html";
             edit.href = vg.path + "/s/edit.html";
             edit.className= up.className="";
-
-        }else{
-            smr.dom.Element(up).remove();
-            smr.dom.Element(edit).remove();
         }
 
 

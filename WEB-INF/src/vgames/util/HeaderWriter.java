@@ -71,9 +71,11 @@ public abstract class HeaderWriter {
                 genres.forEach(s -> sj.add(s));
                 write(new Tag("script",//
                 "vg.user=" + JSON.stringify(MyHashMap.create("id", user.getId(),//
-                        "name", Convert.escapeHtml(user.getName()),//
+                        "name", user.getName(),//
                         "icon", user.getIcon(),//
-                        "prof", user.getProf())) + ";vg.set('" + CONTEXTPATH + "');vg.isGuest=" + String.valueOf(isGuest) + ";vg.GENRE_LIST=" + sj.toString()));
+                        "prof", Convert.escapeHtml(Convert.escapeTextarea(user.getProf())))) + //
+                ";vg.set('" + CONTEXTPATH + "');vg.isGuest=" + String.valueOf(isGuest) + //
+                ";vg.GENRE_LIST=" + sj.toString()));
                 writingIntoHead();
 
             }
