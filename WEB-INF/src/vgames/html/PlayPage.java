@@ -34,9 +34,9 @@ public class PlayPage extends ExtendedHttpServlet {
                     ArrayList<HashMap<String, Object>> list = null;
                     try {
                         list = db.setPrepareObjects(gameid)//
-                        .exe("select g.uid as uid,u.uname as uname from vgame as g,vuser as u where g.uid=u.uid and g.gid=?",//
+                        .exe("select g.uid as uid,u.uname as uname,u.uicon as uicon from vgame as g,vuser as u where g.uid=u.uid and g.gid=?",//
                         "[]",//
-                        "uid", "uname")//
+                        "uid", "uname", "uicon")//
                         .getList();
                     } catch (SQLException e) {
                         // TODO 自動生成された catch ブロック
@@ -46,7 +46,7 @@ public class PlayPage extends ExtendedHttpServlet {
                     if (list != null && !list.isEmpty()) {
                         HashMap<String, Object> map = list.get(0);
                         script += "vg.game.uname='" + map.get("uname") + "';vg.game.uid='" + //
-                        map.get("uid") + "';";
+                        map.get("uid") + "';vg.game.uicon='" + map.get("uicon") + "';";
                     }
                     write(new Tag("script",//
                     script));

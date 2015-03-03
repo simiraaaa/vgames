@@ -10,20 +10,31 @@
   <div class="dbodyin">
 
 
-    <div id="user">
-<div class="user">
-<div class="iconDiv">
-<img alt="icon" src="/vgames/user/default.png" id="usericon">
-</div>
+    <div class="user">
+      <div class="left">
 
-<div class="name">name</div>
-<div class="prof">profprof</div>
+        <div class="iconDiv">
+          <img alt="icon" src="" id="uicon">
+        </div>
 
-</div>
- </div>
-    <a class="dispnone" id="up">ゲームを投稿する</a>
-    <br>
-    <a class="dispnone" id="edit">ゲームを編集する</a>
+        <div class="name" id="uname"></div>
+        <div class="prof" id="uprof"></div>
+
+      </div>
+      <div class="right">
+        <div class="margin5">
+          <a  class="dispnone" id="up">ゲームを投稿する</a>
+        </div>
+        <div class="margin5">
+          <a class="dispnone" id="edit">ゲームを編集する</a>
+        </div>
+
+        <div class="margin5">
+          <a class="dispnone" id="epro">プロフィールを編集する</a>
+        </div>
+      </div>
+
+    </div>
     <button type="button" id="toggleButton">お気に入りを表示</button>
     <div id="listheader" style="font-size:1.5em; text-align:center;">
       投稿したゲーム一覧
@@ -36,18 +47,22 @@
 </div>
 <script type="text/javascript">
   (function(smr, vg, undefined) {
-    var user =null;
+    var user = null;
 
-    var run = function(){
+    var run = function() {
       (function(d) {
         d.g = d.getElementById;
-        d.g("user").textContent = user.name;
-        var up=d.g("up");
-        var edit= d.g("edit");
-        if(vg.isMypage){
-            up.href = vg.path + "/s/upload.html";
-            edit.href = vg.path + "/s/edit.html";
-            edit.className= up.className="";
+        d.g("uname").textContent = user.name;
+        d.g("uicon").src = vg.path + "/user/" + user.icon;
+        d.g("uprof").innerHTML = user.prof;
+        var up = d.g("up");
+        var edit = d.g("edit");
+        var ep = d.g("epro");
+        if (vg.isMypage) {
+          up.href = vg.path + "/s/upload.html";
+          edit.href = vg.path + "/s/edit.html";
+          ep.href = vg.path+"/s/editProf.html";
+          edit.className = up.className =ep.className = "abutton";
         }
 
 
@@ -97,12 +112,12 @@
     if (vg.isMypage) {
       user = vg.user;
       run();
-    }else{
-      vg.getAjax.getUser(function(_user){
-        if(!_user)return location.replace(vg.path+"/login.jsp");
-        user=_user;
+    } else {
+      vg.getAjax.getUser(function(_user) {
+        if (!_user) return location.replace(vg.path + "/login.jsp");
+        user = _user;
         run();
-      },location.hash.substring(1));
+      }, location.hash.substring(1));
     }
   })(smr, vg);
 </script>

@@ -19,7 +19,6 @@ import myclass.html.Html;
 import myclass.html.HtmlWriter;
 import myclass.html.Tag;
 import myclass.servlet.Path;
-import myclass.util.Convert;
 import myclass.util.JSON;
 import myclass.wrap.MyHashMap;
 import vgames.table.Genre;
@@ -67,15 +66,16 @@ public abstract class HeaderWriter {
 
                 WrapJspWriter.writeScript(out, CONTEXTPATH, Path.JS_PATH, Path.getJsLibs());
 
-                StringJoiner sj = new StringJoiner("','", "['", "'];");
+                StringJoiner sj = new StringJoiner("','", ";vg.GENRE_LIST=['", "'];");
                 genres.forEach(s -> sj.add(s));
                 write(new Tag("script",//
                 "vg.user=" + JSON.stringify(MyHashMap.create("id", user.getId(),//
                         "name", user.getName(),//
+                        "plainProf", user.getPlainProf(),//
                         "icon", user.getIcon(),//
-                        "prof", Convert.escapeHtml(Convert.escapeTextarea(user.getProf())))) + //
+                        "prof", user.getProf())) + //
                 ";vg.set('" + CONTEXTPATH + "');vg.isGuest=" + String.valueOf(isGuest) + //
-                ";vg.GENRE_LIST=" + sj.toString()));
+                sj.toString()));
                 writingIntoHead();
 
             }

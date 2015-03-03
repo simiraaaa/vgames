@@ -33,6 +33,10 @@ public class Uploader {
     }
 
     public static String upImage(FileItem imgFile, int gameid, String IMAGE_PATH) {
+        return upImage(imgFile, String.valueOf(gameid), IMAGE_PATH);
+    }
+
+    public static String upImage(FileItem imgFile, String gameid, String IMAGE_PATH) {
         String type = checkImageType(imgFile.getName());
         if (type == null) {
             return "不正な拡張子です。";

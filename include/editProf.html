@@ -1,0 +1,52 @@
+<div class="dbody">
+  <div class="dbodyin">
+
+    <div class="user" style="height:500px;">
+
+      <h1 style="text-align:center">プロフィール編集</h1>
+      <form enctype="multipart/form-data" method="post" id="data">
+
+        <div class="iconDiv">
+          <img alt="icon" src="" id="uicon">
+          <div style="position:absolute; top:110%;">
+          <p>
+          画像の変更
+          </p>
+          <input type="file" name="uicon" id="upimg">
+          </div>
+        </div>
+
+        <div id="nameDiv">
+         名前 <input type="text" style="width:50%;" id = "name" name="name" value="">
+        </div>
+        <div id="profDiv"><p>プロフィール</p></div>
+
+		<button type="button"  onclick="vg.getAjax.prof(this.parentNode);">送信</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+<script charset="utf-8">
+  (function(smr,vg,undefined){
+      var getById= function(i){
+        return document.getElementById(i);
+      };
+    var Element = smr.dom.Element;
+    var Textarea = smr.dom.Textarea;
+    var nameDiv =Element( getById("nameDiv"));
+    var profDiv =Element( getById("profDiv"));
+    getById("uicon").src=vg.path+"/user/"+vg.user.icon;
+    var textarea = profDiv.create("textarea");
+    var s = textarea.element.style;
+    s.width="60%";
+    s.height="300px";
+    textarea.element.name="prof";
+    textarea.value=vg.user.plainProf;
+    profDiv.append(textarea);
+    getById("name").value=vg.user.name;
+
+
+
+  })(smr,vg);
+</script>

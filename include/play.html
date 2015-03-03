@@ -3,7 +3,7 @@
     <iframe id="game" src="" width="59%" height="80%" style="border:0; padding:0; margin:0;"></iframe>
     <iframe id="ranking" src="" width="39%" height="80%" style="border:0; padding:0; margin:0;"></iframe>
 	<div>
-	created&nbsp;by&nbsp;<a href="" id="creator"></a>
+	created&nbsp;by&nbsp;<a href="" id="creator" ><img alt="icon" style="max-height:50px;max-width:50px;" id="uicon"><span id="uname"></span></a>
 	</div>
     <button type="button" onclick="var s=document.getElementById('setumei').style;var v=s.visibility;var isHidden=(v==='hidden'); s.visibility=isHidden?'visible':'hidden'; this.textContent=isHidden?'説明を隠す':'説明を表示';">
     説明を隠す
@@ -57,9 +57,9 @@
         vg.getAjax.fav();
     };
 
-    var creator= document.getElementById("creator");
-    creator.href = vg.path+"/s/mypage.html#"+vg.game.uid;
-    creator.textContent=vg.game.uname;
+    document.getElementById("creator").href = vg.path+"/s/mypage.html#"+vg.game.uid;
+    document.getElementById("uname").textContent=vg.game.uname;
+    document.getElementById("uicon").src=vg.path+"/user/"+ vg.game.uicon;
 
   }(smr, vg);
 </script>

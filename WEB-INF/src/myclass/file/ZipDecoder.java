@@ -29,7 +29,7 @@ public class ZipDecoder {
     public static void unzip(String inputZipFile, String outputFile, String zipFileName) throws IOException {
         File zipFile = new File(inputZipFile);
         // 出力先ディレクトリを作成
-        File outputDirectry = Directry.createOutputDirectry(zipFile, outputFile);
+        File outputDirectry = Directory.createOutputDirectory(zipFile, outputFile);
         ZipDecoder.unzip(zipFile, outputDirectry, zipFileName);
 
     }

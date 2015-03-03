@@ -106,7 +106,12 @@ public class JsonGetter extends AjaxResponse {
             puts(STATUS, SUCCESS, TEXT, null);
             return null;
         }
-        puts(STATUS, SUCCESS, TEXT, MyHashMap.create("id", user.getId(), "name", user.getName(), "icon", user.getIcon(), "prof", user.getProf()));
+        puts(STATUS, SUCCESS,//
+                TEXT, MyHashMap.create("id", user.getId(),//
+                        "name", user.getName(),//
+                        "icon", user.getIcon(),//
+                        "prof", user.getProf(),//
+                        "plainProf", user.getPlainProf()));
         return null;
     }
 

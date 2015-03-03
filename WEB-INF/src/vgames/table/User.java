@@ -3,6 +3,8 @@ package vgames.table;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import myclass.util.Convert;
+
 public class User {
 
     public static final String TABLE_NAME = "vuser", ID = "uid", PASS = "upass", NAME = "uname",
@@ -14,7 +16,7 @@ public class User {
         return FIELDS;
     }
 
-    private String id, pass, name, icon, prof;
+    private String id, pass, name, icon, plainProf, prof;
 
     public String getIcon() {
         return icon;
@@ -26,6 +28,10 @@ public class User {
 
     public User(ArrayList<HashMap<String, Object>> info) {
         setAll(info);
+    }
+
+    public String getPlainProf() {
+        return plainProf;
     }
 
     public User setAll(String id, String name, String pass, String icon, String prof) {
@@ -43,7 +49,8 @@ public class User {
         pass = (String) map.get(PASS);
         name = (String) map.get(NAME);
         icon = (String) map.get(ICON);
-        prof = (String) map.get(PROF);
+        plainProf = (String) map.get(PROF);
+        prof = new Convert().set(plainProf).escapeHtml().escapeTextarea().get();
 
         return this;
     }

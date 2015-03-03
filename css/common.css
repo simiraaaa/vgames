@@ -25,6 +25,18 @@
 
 }
 
+.user .left {
+	float:left;
+	width:58%;
+}
+
+.user .right {
+	width:38%;
+	float:left;
+	margin:5px;
+}
+
+
 .formbody{
 	width:80%;
 	margin: 0 auto;
@@ -55,9 +67,12 @@
 }
 
 .user{
-	background: silver;
+	background: #eee;
 	border-radius:15px;
 	padding:10px;
+	margin:10px;
+	width:100%;
+	height:220px;
 }
 
 .iconDiv{
@@ -80,9 +95,26 @@
 
 .user .name{
 	font-size:1.2em;
+	font-weight:bold;
 	margin:5px;
 }
 
 .user .prof{
 	margin:5px;
+}
+
+.margin5{
+	margin:5px;
+}
+
+.abutton{
+	padding:1px 5px;
+	text-decoration:none;
+	color:white;
+	background:orange;
+	border-radius:15px;
+	border-top:solid 1px #eee;
+	border-left:solid 1px #eee;
+	border-right:solid 1px #aaa;
+	border-bottom:solid 1px #aaa;
 }

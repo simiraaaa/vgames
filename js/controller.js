@@ -55,6 +55,22 @@ var vg = vg || {};
           }
         }, false);
     },
+    prof: function(slf) {
+        slf = slf || this;
+        slf.style.visibility = "hidden";
+        vg.appendLoading("更新しています。しばらくお待ちください。");
+        vg.ajax("prof.json", new FormData(slf),
+          function(data) {
+            if (data.status === "success") {
+              document.body.style.visibility = "hidden";
+              smr.global.location.href = vg.path+"/s/mypage.html";
+            } else {
+              slf.style.visibility = "visible";
+              vg.removeLoading();
+              alert(data.text);
+            }
+          }, false);
+      },
 
     gameList: function(f, uid) {
       if (uid === undefined) uid = "";
